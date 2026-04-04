@@ -20,15 +20,22 @@
                 <PaperContent>
                     <div class="container-fluid p-0">
                         <div class="row gy-3">
-                            <div class="col-12">
+                            <div class="col-sm-6">
                                 <Select bind:value={app.objectsPerRow} label="Choices per row" variant="standard" alwaysFloat={true}>
                                     {#each objectWidths as objectWidth (objectWidth.text)}
                                         <Option value={objectWidth.value}>{objectWidth.text}</Option>
                                     {/each}
                                     {#snippet helperText()}
-                                        Maximum Number of Choices per Row for Screens Between 720px and 1280px.
+                                        Maximum Number of Choices per Row.
                                     {/snippet}
                                 </Select>
+                            </div>
+                            <div class="col-sm-6">
+                                <Textfield bind:value={() => app.smallerScreenPx ?? 720, (e) => app.smallerScreenPx = e} label="Minimum Screen Width" type="number" variant="standard" suffix="px" input$min="0" input$class="text-right">
+                                    {#snippet helper()}
+                                        <HelperText persistent>Applies between this value and 1280px.</HelperText>
+                                    {/snippet}
+                                </Textfield>
                             </div>
                             <div class="col-12">
                                 <FormField>
@@ -198,6 +205,7 @@
     import Button, { Label } from '@smui/button';
     import Dialog, { Title, Content, Actions } from '@smui/dialog';
     import FormField from '@smui/form-field';
+    import HelperText from '$lib/custom/textfield/helper-text/HelperText.svelte';
     import Paper, { Title as PaperTitle, Content as PaperContent } from '@smui/paper';
     import Select, { Option } from '$lib/custom/select';
     import Switch from '@smui/switch';
@@ -210,6 +218,9 @@
 
     let { open, onclose }: { open: boolean; onclose: () => void; } = $props();
     const objectWidths = [{
+        text: 'Default (Creator Setting)',
+        value: 'default'
+    }, {
         text: "2 per row",
         value: "col-6"
     }, {

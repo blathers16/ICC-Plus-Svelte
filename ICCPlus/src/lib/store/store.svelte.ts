@@ -1,5 +1,5 @@
 import { get, readable, writable } from 'svelte/store';
-import type { App, RowDesignGroup, ObjectDesignGroup, Group, Row, Choice, PointType, GlobalRequirement, Word, Variable, Requireds, Score, ActivatedMap, ChoiceMap, BgmPlayer, SaveSlot, Discount, TempScore, DlgVariables, SnackBarVariables, Addon, ViewerSetting, MenuVariables, ExprNode, Category, MusicPlayer, ChoiceOptions, WordDialog, ImgDialog, SelectableAddon, MDObject } from './types';
+import { type App, type RowDesignGroup, type ObjectDesignGroup, type Group, type Row, type Choice, type PointType, type GlobalRequirement, type Word, type Variable, type Requireds, type Score, type ActivatedMap, type ChoiceMap, type BgmPlayer, type SaveSlot, type Discount, type TempScore, type DlgVariables, type SnackBarVariables, type Addon, type ViewerSetting, type MenuVariables, type ExprNode, type Category, type MusicPlayer, type ChoiceOptions, type WordDialog, type ImgDialog, type SelectableAddon, type MDObject, type LastPages, type SoundEffect } from './types';
 import { SvelteMap, SvelteSet } from 'svelte/reactivity';
 import { z } from 'zod';
 import JSZip from 'jszip';
@@ -9,7 +9,7 @@ import type { SvelteVirtualizer } from '@tanstack/svelte-virtual';
 import { evaluate } from '@antv/expr';
 import { tick } from 'svelte';
 
-export const appVersion = '2.8.10';
+export const appVersion = '2.9.0';
 export const filterStyling = {
     selFilterBlurIsOn: false,
     selFilterBlur: 0,
@@ -358,7 +358,7 @@ export const backpackStyling = {
     backpackBgImage: '',
     backPackWidth: 1400
 }
-export const selectableAddonItems = ['isSelectable', 'scores', 'multipleUseVariable', 'hideMultipleCounter', 'allowSelectByClick', 'hideCounterUntilSelect', 'isSelectableMultiple', 'isMultipleUseVariable', 'multipleScoreId', 'numMultipleTimesMinus', 'numMultipleTimesPluss', 'isNotSelectable', 'selectOnce', 'notDeselectedByClean', 'isNotResult', 'isImageUpload', 'cleanACtivatedOnSelect', 'activateOtherChoice', 'isNotDeactivate', 'isAllowDeselect', 'activateAfterReset', 'isActivateRandom', 'numActivateRandom', 'activateThisChoice', 'isNotActiveUnselectable', 'deactivateOtherChoice', 'deactivateThisChoice', 'discountOther', 'discountLowLimitIsOn', 'discountLowLimit', 'discountShow', 'replaceScoreText', 'hideScoreValue', 'hideScoreIcon', 'discountBeforeText', 'discountAfterText', 'isDisChoices', 'discountRows', 'discountChoices', 'discountGroups', 'discountPointTypes', 'discountOperator', 'discountValue', 'stackableDiscount', 'useDiscountCount', 'discountCount', 'numDiscountChoices', 'appliedDisChoices', 'duplicateRow', 'dRowAddSufReq', 'dRowAddSufFunc', 'duplicateRowId', 'duplicateRowPlace', 'isContentHidden', 'hiddenContentsRow', 'hiddenContentsType', 'addToAllowChoice', 'idOfAllowChoice', 'numbAddToAllowChoice', 'showAllAddons', 'changeTemplates', 'changeAddonTemplate', 'changeWidth', 'changeTemplatesList', 'changeToThisTemplate', 'changeWidthList', 'changeToThisWidth', 'defaultTemplate', 'defaultWidth', 'scrollToRow', 'scrollToObject', 'scrollObjectId', 'scrollRowId', 'changePointBar', 'changeBarBgColorIsOn', 'changeBarTextColorIsOn', 'changeBarIconColorIsOn', 'changedBarBgColor', 'changedBarTextColor', 'changedBarIconColor', 'changeBackground', 'changeBgImage', 'changedBgColorCode', 'bgImage', 'setBgmIsOn', 'bgmId', 'bgmFadeIn', 'bgmFadeOut', 'bgmFadeInSec', 'bgmFadeOutSec', 'bgmNoLoop', 'muteBgm', 'useAudioURL', 'isFadeTransition', 'fadeTransitionColor', 'fadeTransitionTime', 'fadeInTransitionTime', 'fadeOutTransitionTime', 'multiplyPointtypeIsOn', 'pointTypeToMultiply', 'multiplyWithThis', 'multiplyPointtypeIsId', 'dividePointtypeIsOn', 'pointTypeToDivide', 'divideWithThis', 'startingSumAtMultiply', 'startingSumAtDivide', 'startingSumAtSet', 'multiplyPointtypeIsOnCheck', 'dividePointtypeIsOnCheck', 'setPointtypeIsOnCheck', 'isChangeVariables', 'changedVariables', 'changeType', 'textfieldIsOn', 'customTextfieldIsOn', 'idOfTheTextfieldWord', 'wordPromptText', 'wordChangeSelect', 'wordChangeDeselect', 'confirmIsOn', 'backpackBtnRequirement', 'forcedActivated', 'activatedFrom', 'activatedRandom', 'activatedRandomMul', 'defaultImage', 'tempMultipleValue', 'randomWeight', 'useSeperateAddon', 'useSlider', 'hideCounter', 'templateStack', 'widthStack', 'isEditModeOn', 'isSelectDelayed', 'selectDelayTime', 'selectDelayTimer', 'showScoreInAddon', 'showReqInAddon', 'setPointtypeIsOn', 'pointTypeToSet', 'setWithThis'];
+export const selectableAddonItems = ['isSelectable', 'scores', 'multipleUseVariable', 'hideMultipleCounter', 'allowSelectByClick', 'hideCounterUntilSelect', 'isSelectableMultiple', 'isMultipleUseVariable', 'multipleScoreId', 'numMultipleTimesMinus', 'numMultipleTimesPluss', 'isNotSelectable', 'selectOnce', 'notDeselectedByClean', 'isNotResult', 'isImageUpload', 'countAsChoice', 'cleanACtivatedOnSelect', 'activateOtherChoice', 'isNotDeactivate', 'isAllowDeselect', 'activateAfterReset', 'isActivateRandom', 'numActivateRandom', 'activateThisChoice', 'isNotActiveUnselectable', 'deactivateOtherChoice', 'deactivateThisChoice', 'discountOther', 'discountLowLimitIsOn', 'discountLowLimit', 'discountShow', 'replaceScoreText', 'hideScoreValue', 'hideScoreIcon', 'discountBeforeText', 'discountAfterText', 'isDisChoices', 'discountRows', 'discountChoices', 'discountGroups', 'discountPointTypes', 'discountOperator', 'discountValue', 'stackableDiscount', 'useDiscountCount', 'discountCount', 'numDiscountChoices', 'appliedDisChoices', 'duplicateRow', 'dRowAddSufReq', 'dRowAddSufFunc', 'duplicateRowId', 'duplicateRowPlace', 'isContentHidden', 'hiddenContentsRow', 'hiddenContentsType', 'addToAllowChoice', 'idOfAllowChoice', 'numbAddToAllowChoice', 'showAllAddons', 'changeTemplates', 'changeAddonTemplate', 'changeWidth', 'changeTemplatesList', 'changeToThisTemplate', 'changeWidthList', 'changeToThisWidth', 'defaultTemplate', 'defaultWidth', 'scrollToRow', 'scrollToObject', 'scrollObjectId', 'scrollRowId', 'changePointBar', 'changeBarBgColorIsOn', 'changeBarTextColorIsOn', 'changeBarIconColorIsOn', 'changedBarBgColor', 'changedBarTextColor', 'changedBarIconColor', 'changeBackground', 'changeBgImage', 'changedBgColorCode', 'bgImage', 'setBgmIsOn', 'bgmId', 'bgmFadeIn', 'bgmFadeOut', 'bgmFadeInSec', 'bgmFadeOutSec', 'bgmNoLoop', 'muteBgm', 'useAudioURL', 'isFadeTransition', 'fadeTransitionColor', 'fadeTransitionTime', 'fadeInTransitionTime', 'fadeOutTransitionTime', 'multiplyPointtypeIsOn', 'pointTypeToMultiply', 'multiplyWithThis', 'multiplyPointtypeIsId', 'dividePointtypeIsOn', 'pointTypeToDivide', 'divideWithThis', 'startingSumAtMultiply', 'startingSumAtDivide', 'startingSumAtSet', 'multiplyPointtypeIsOnCheck', 'dividePointtypeIsOnCheck', 'setPointtypeIsOnCheck', 'isChangeVariables', 'changedVariables', 'changeType', 'textfieldIsOn', 'customTextfieldIsOn', 'idOfTheTextfieldWord', 'wordPromptText', 'wordChangeSelect', 'wordChangeDeselect', 'confirmIsOn', 'backpackBtnRequirement', 'forcedActivated', 'activatedFrom', 'activatedRandom', 'activatedRandomMul', 'defaultImage', 'tempMultipleValue', 'randomWeight', 'useSeperateAddon', 'useSlider', 'hideCounter', 'templateStack', 'widthStack', 'isEditModeOn', 'isSelectDelayed', 'selectDelayTime', 'selectDelayTimer', 'showScoreInAddon', 'showReqInAddon', 'setPointtypeIsOn', 'pointTypeToSet', 'setWithThis', 'groups'];
 export const app = $state<App>({
     version: appVersion,
     isEditModeOnAll: true,
@@ -379,6 +379,7 @@ export const app = $state<App>({
     tmpScore: [],
     tmpAddon: [],
     tmpGroup: [],
+    tmpDesignGroup: [],
     rowIdLength: 4,
     objectIdLength: 4,
     words: [],
@@ -387,6 +388,7 @@ export const app = $state<App>({
     objectDesignGroups: [],
     objectsPerRow: 'col-6',
     globalRequirements: [],
+    soundEffects: [],
     googleFonts: [],
     customFonts: [],
     compressImageAuto: false,
@@ -448,6 +450,23 @@ export const app = $state<App>({
     defaultUseShowReq: false,
     cropperPosition: 4,
     enableSearch: true,
+    useDesignGroupBtn: false,
+    smallerScreenPx: 720,
+    viewerConfig: {
+        title: 'CYOA Plus 2',
+        favicon: '',
+        loadingType: 'ind1',
+        loadingBgColor: '#232428',
+        loadingBgImage: '',
+        loadingCircleColor: '#d5c999',
+        loadingTrackColor: '#3c3c3c',
+        loadingText: 'Loading',
+        loadingTextColor: '#d5c999',
+        loadingTextFont: 'Arial',
+        loadingTextShadow: '#fff000',
+        useSeparateImages: false,
+        useLocalViewer: false
+    },
     backpack: [{
         index: 0,
         id: 'default_backpack_row',
@@ -500,6 +519,7 @@ export const defaultApp: App = {
     tmpScore: [],
     tmpAddon: [],
     tmpGroup: [],
+    tmpDesignGroup: [],
     rowIdLength: 4,
     objectIdLength: 4,
     words: [],
@@ -508,6 +528,7 @@ export const defaultApp: App = {
     objectDesignGroups: [],
     objectsPerRow: 'col-6',
     globalRequirements: [],
+    soundEffects: [],
     googleFonts: [],
     customFonts: [],
     compressImageAuto: false,
@@ -569,6 +590,23 @@ export const defaultApp: App = {
     defaultUseShowReq: false,
     cropperPosition: 4,
     enableSearch: true,
+    useDesignGroupBtn: false,
+    smallerScreenPx: 720,
+    viewerConfig: {
+        title: 'CYOA Plus 2',
+        favicon: '',
+        loadingType: 'ind1',
+        loadingBgColor: '#232428',
+        loadingBgImage: '',
+        loadingCircleColor: '#d5c999',
+        loadingTrackColor: '#3c3c3c',
+        loadingText: 'Loading',
+        loadingTextColor: '#d5c999',
+        loadingTextFont: 'Arial',
+        loadingTextShadow: '#fff000',
+        useSeparateImages: false,
+        useLocalViewer: false
+    },
     backpack: [{
         index: 0,
         id: 'default_backpack_row',
@@ -659,8 +697,8 @@ export const objectWidths = [{
     text: '12 per row',
     value: 'col-xl-1'
 }];
-export const activatedMap = $state<SvelteMap<string, ActivatedMap>>(new SvelteMap);
-export const tmpActivatedMap = $state<SvelteMap<string, ActivatedMap>>(new SvelteMap);
+export const activatedMap = $state<SvelteMap<string, ActivatedMap>>(new SvelteMap());
+export const tmpActivatedMap = $state<SvelteMap<string, ActivatedMap>>(new SvelteMap());
 export const textFonts = $state(['Times New Roman', 'Arial', 'Roboto', 'Courier New', 'Courier', 'Verdana', 'Georgia', 'Comic Sans MS', 'Candara', 'Arial Black', 'Impact', 'Helvetica', 'Calibri', 'Cambria', 'Trebuchet MS', 'Tahoma']);
 export const pointTypeMap = $state<SvelteMap<string, PointType>>(new SvelteMap());
 export const rowMap = $state<SvelteMap<string, Row>>(new SvelteMap());
@@ -672,7 +710,8 @@ export const wordMap = $state<SvelteMap<string, Word>>(new SvelteMap());
 export const variableMap = $state<SvelteMap<string, Variable>>(new SvelteMap());
 export const rowDesignMap = $state<SvelteMap<string, RowDesignGroup>>(new SvelteMap());
 export const objectDesignMap = $state<SvelteMap<string, ObjectDesignGroup>>(new SvelteMap());
-export const categoryMap = $state<SvelteMap<string, Category>>(new SvelteMap);
+export const categoryMap = $state<SvelteMap<string, Category>>(new SvelteMap());
+export const sfxMap = $state<SvelteMap<string, SoundEffect>>(new SvelteMap());
 export const scoreSet = $state<SvelteSet<string>>(new SvelteSet());
 export const mdObjects = $state<MDObject[]>([]);
 export const currentComponent = $state({ value: 'appMain'});
@@ -769,6 +808,18 @@ export const winWidth = readable(window.innerWidth, (set) => {
     window.addEventListener('resize', update);
     return () => window.removeEventListener('resize', update);
 });
+export const lastPages = $state<LastPages>({
+    point: 1,
+    variable: 1,
+    group: 1,
+    word: 1,
+    rDesign: 1,
+    cDesign: 1,
+    isRow: true,
+    globalReq: 1,
+    pSave: 1,
+    vSave: 1
+});
 export const pointCategories = $state<Category[]>([]);
 export const groupCategories = $state<Category[]>([]);
 export const rowDGCategories = $state<Category[]>([]);
@@ -785,12 +836,13 @@ let optimizedPointTypes = $derived(app.pointTypes.map(({id}) => id));
 let optimizedVariables = $derived(app.variables.map(({id}) => id));
 let optimizedWords = $derived(app.words.map(({id}) => id));
 let optimizedGlobalRequirement = $derived(app.globalRequirements?.map(({id}) => id));
+let optimizedDesignGroups = $derived(app.objectDesignGroups.map(({id}) => id));
 let optimizedAddons = $derived(app.rows.flatMap(row => row.objects).flatMap(obj => obj.addons ?? []).filter(addon => addon.isSelectable).map(({ id }) => id));
 let optimizedBackpackAddons = $derived(app.backpack.flatMap(row => row.objects).flatMap(obj => obj.addons ?? []).filter(addon => addon.isSelectable).map(({ id }) => id));
 let optimizedSelectables = $derived([...optimizedChoices, ...optimizedAddons]);
 let optimizedBackpackSelectables = $derived([...optimizedBackpackChoices, ...optimizedBackpackAddons]);
 let optimizedSearchables = $derived([...app.rows.flatMap(row => row.objects).filter(choice => !choice.isNotSelectable && !choice.isNotSearchable).map(({ id }) => id), ...app.rows.flatMap(row => row.objects).flatMap(obj => obj.addons ?? []).filter(addon => addon.isSelectable && !addon.isNotSelectable && !addon.isNotSearchable).map(({ id }) => id)]);
-
+let optimizedSoundEffects = $derived(app.soundEffects.map(({id}) => id));
 export function getRows() {
     return optimizedRows;
 }
@@ -818,6 +870,9 @@ export function getWords() {
 export function getGlobalRequirement() {
     return optimizedGlobalRequirement;
 }
+export function getDesignGroups() {
+    return optimizedDesignGroups;
+}
 export function getSelectables() {
     return optimizedSelectables;
 }
@@ -826,6 +881,9 @@ export function getBackpackSelectables() {
 }
 export function getSearchables() {
     return optimizedSearchables;
+}
+export function getSoundEffects() {
+    return optimizedSoundEffects;
 }
 let dbInstance: IDBDatabase | null = null;
 let dbInstanceOld: IDBDatabase | null = null;
@@ -1567,6 +1625,20 @@ export function getGlobalReqLabel(str: string) {
     }
     return '';
 }
+export function getDesignLabel(str: string) {
+    const group = objectDesignMap.get(str);
+    if (typeof group !== 'undefined') {
+        return `${group.id} | ${group.name}`;
+    }
+    return '';
+}
+export function getSfxLabel(str: string) {
+    const sfx = sfxMap.get(str);
+    if (typeof sfx !== 'undefined') {
+        return `${sfx.id} | ${sfx.name}`;
+    }
+    return '';
+}
 function getReqText(req: Requireds): string {
     switch (req.type) {
         case 'id': {
@@ -1651,131 +1723,19 @@ export function getChoiceTitle(req: Requireds) {
     return `${req.beforeText} ${getReqText(req)} ${req.afterText}`;
 }
 function checkInitId(id: string) {
-    return rowMap.has(id) || choiceMap.has(id) || wordMap.has(id) || pointTypeMap.has(id) || rowDesignMap.has(id) || objectDesignMap.has(id) || groupMap.has(id) || variableMap.has(id)
+    return rowMap.has(id) || choiceMap.has(id) || wordMap.has(id) || pointTypeMap.has(id) || rowDesignMap.has(id) || objectDesignMap.has(id) || groupMap.has(id) || variableMap.has(id) || scoreSet.has(id) || globalReqMap.has(id) || sfxMap.has(id);
 }
-export function generateRowId(repeated: number, strLength: number) {
-    let id = app.addPrefix ? 'row-' : '';
-    let str = 'abcdefghijklmnopqrstuvwxyz0123456789';
+export function generateId(repeated: number, strLength: number, type: string) {
+    const str = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    let id = app.addPrefix ? `${type}-` : '';
     for (var o = 0; o < strLength; o++) {
         id += str.charAt(Math.floor(Math.random() * str.length));
     }
     if (checkInitId(id)) {
         if (repeated > 2) {
-            return generateRowId(0, ++strLength);
+            return generateId(0, ++strLength, type);
         } else {
-            return generateRowId(++repeated, strLength);
-        }
-    } else {
-        return id;
-    }
-}
-export function generateWordId(repeated: number, strLength: number) {
-    let id = app.addPrefix ? 'word-' : '';
-    let str = 'abcdefghijklmnopqrstuvwxyz0123456789';
-    for (var o = 0; o < strLength; o++) {
-        id += str.charAt(Math.floor(Math.random() * str.length));
-    }
-    if (checkInitId(id)) {
-        if (repeated > 2) {
-            return generateWordId(0, ++strLength);
-        } else {
-            return generateWordId(++repeated, strLength);
-        }
-    } else {
-        return id;
-    }
-}
-export function generateObjectId(repeated: number, strLength: number, isAddon: boolean = false) {
-    let id = app.addPrefix ? isAddon ? 'addon-' : 'choice-' : '';
-    let str = 'abcdefghijklmnopqrstuvwxyz0123456789';
-    for (var o = 0; o < strLength; o++) {
-        id += str.charAt(Math.floor(Math.random() * str.length));
-    }
-    if (checkInitId(id)) {
-        if (repeated > 2) {
-            return generateObjectId(0, ++strLength);
-        } else {
-            return generateObjectId(++repeated, strLength);
-        }
-    } else {
-        return id;
-    }
-}
-export function generateDesignId(repeated: number, strLength: number, isRow: boolean) {
-    let id = app.addPrefix ? 'design-' : '';
-    let str = 'abcdefghijklmnopqrstuvwxyz0123456789';
-    for (var o = 0; o < strLength; o++) {
-        id += str.charAt(Math.floor(Math.random() * str.length));
-    }
-    if (checkInitId(id)) {
-        if (repeated > 2) {
-            return generateDesignId(0, ++strLength, isRow);
-        } else {
-            return generateDesignId(++repeated, strLength, isRow);
-        }
-    } else {
-        return id;
-    }
-}
-export function generateGroupId(repeated: number, strLength: number) {
-    let id = app.addPrefix ? 'group-' : '';
-    let str = 'abcdefghijklmnopqrstuvwxyz0123456789';
-    for (var o = 0; o < strLength; o++) {
-        id += str.charAt(Math.floor(Math.random() * str.length));
-    }
-    if (checkInitId(id)) {
-        if (repeated > 2) {
-            return generateGroupId(0, ++strLength);
-        } else {
-            return generateGroupId(++repeated, strLength);
-        }
-    } else {
-        return id;
-    }
-}
-export function generatePointTypeId(repeated: number, strLength: number) {
-    let id = app.addPrefix ? 'point-' : '';
-    let str = 'abcdefghijklmnopqrstuvwxyz0123456789';
-    for (var o = 0; o < strLength; o++) {
-        id += str.charAt(Math.floor(Math.random() * str.length));
-    }
-    if (checkInitId(id)) {
-        if (repeated > 2) {
-            return generatePointTypeId(0, ++strLength);
-        } else {
-            return generatePointTypeId(++repeated, strLength);
-        }
-    } else {
-        return id;
-    }
-}
-export function generateVariableId(repeated: number, strLength: number) {
-    let id = app.addPrefix ? 'variable-' : '';
-    let str = 'abcdefghijklmnopqrstuvwxyz0123456789';
-    for (var o = 0; o < strLength; o++) {
-        id += str.charAt(Math.floor(Math.random() * str.length));
-    }
-    if (checkInitId(id)) {
-        if (repeated > 2) {
-            return generateVariableId(0, ++strLength);
-        } else {
-            return generateVariableId(++repeated, strLength);
-        }
-    } else {
-        return id;
-    }
-}
-export function generateScoreId(repeated: number, strLength: number) {
-    let id = 's-';
-    let str = 'abcdefghijklmnopqrstuvwxyz0123456789';
-    for (var o = 0; o < strLength; o++) {
-        id += str.charAt(Math.floor(Math.random() * str.length));
-    }
-    if (scoreSet.has(id)) {
-        if (repeated > 2) {
-            return generateScoreId(0, ++strLength);
-        } else {
-            return generateScoreId(++repeated, strLength);
+            return generateId(++repeated, strLength, type);
         }
     } else {
         return id;
@@ -1819,6 +1779,22 @@ export function widthToNum(str: string) {
         case 'col-sm-11': return 11/12;
         case 'col-12': return 1;
         default: return 1;
+    }
+}
+export function fixedWidth(str: string) {
+    switch(str) {
+        case 'col-xl-1': return 'col-1';
+        case 'col-lg-2': return 'col-2';
+        case 'col-md-3': return 'col-3';
+        case 'col-md-4': return 'col-4';
+        case 'col-sm-5': return 'col-5';
+        case 'col-sm-6': return 'col-6';
+        case 'col-sm-7': return 'col-7';
+        case 'col-sm-8': return 'col-8';
+        case 'col-sm-9': return 'col-9';
+        case 'col-sm-10': return 'col-10';
+        case 'col-sm-11': return 'col-11';
+        default: return str;
     }
 }
 let preWords: Word[] = [];
@@ -1891,7 +1867,7 @@ export function getStyling(prop: string, row?: Row, choice?: Choice) {
                     if (typeof group !== 'undefined') {
                         if (typeof group.designGroups !== 'undefined') {
                             for (let j = 0; j < group.designGroups.length; j++) {
-                                const objectDesignGroup = objectDesignMap.get(group.designGroups[i]);
+                                const objectDesignGroup = objectDesignMap.get(group.designGroups[j]);
                                 if (typeof objectDesignGroup !== 'undefined') {
                                     if (objectDesignGroup[prop]) {
                                         const id = objectDesignGroup.activatedId;
@@ -1935,7 +1911,7 @@ export function getStyling(prop: string, row?: Row, choice?: Choice) {
                     if (typeof group !== 'undefined') {
                         if (typeof group.designGroups !== 'undefined') {
                             for (let j = 0; j < group.designGroups.length; j++) {
-                                const rowDesignGroup = rowDesignMap.get(group.designGroups[i]);
+                                const rowDesignGroup = rowDesignMap.get(group.designGroups[j]);
                                 if (typeof rowDesignGroup !== 'undefined') {
                                     if (rowDesignGroup[prop]) {
                                         const id = rowDesignGroup.activatedId;
@@ -2631,6 +2607,124 @@ export async function initYoutubePlayer(localChoice: Choice | SelectableAddon) {
             }
         }
     });
+}
+let audioContext: AudioContext | null = null;
+let initPromise: Promise<void> | null = null;
+export const audioBuffers = new Map<string, AudioBuffer>();
+function base64ToArrayBuffer(str: string) {
+    const binary = atob(str.split(',')[1]);
+    const bytes = new Uint8Array(binary.length);
+
+    for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
+    }
+
+    return bytes.buffer;
+}
+function getCtx() {
+    if (!audioContext) audioContext = new AudioContext();
+    return audioContext;
+}
+export async function initSfx() {
+    if (initPromise) return initPromise;
+
+    const ctx = getCtx();
+
+    initPromise = (async () => {
+        if (ctx.state !== 'running') {
+            await ctx.resume();
+        }
+    })();
+
+    return initPromise;
+}
+export async function loadSfx(id: string, base64: string) {
+    const ctx = getCtx();
+    const arrayBuffer = base64ToArrayBuffer(base64);
+    const buffer = await ctx.decodeAudioData(arrayBuffer);
+
+    audioBuffers.set(id, buffer);
+}
+export async function playSfx(sfx: SoundEffect) {
+    await initSfx();
+
+    const buffer = audioBuffers.get(sfx.id);
+    if (!buffer) return;
+
+    const ctx = getCtx();
+    const source = ctx.createBufferSource();
+    const gain = ctx.createGain();
+
+    source.buffer = buffer;
+    source.detune.value = sfx.pitch;
+    gain.gain.value = sfx.volume;
+
+    source.connect(gain);
+    gain.connect(ctx.destination);
+
+    source.start();
+}
+export function playSfxOnSelect(localChoice: Choice | SelectableAddon) {
+    if (typeof app.soundEffects === 'undefined' || app.soundEffects.length === 0) return;
+    if (localChoice.useSfx && localChoice.sfxId && localChoice.sfxOnSelect) {
+        const sfx = sfxMap.get(localChoice.sfxId);
+
+        if (typeof sfx !== 'undefined') {
+            playSfx(sfx);
+            return;
+        }
+    }
+    for (let i = 0; i < app.soundEffects.length; i++) {
+        const sfx = app.soundEffects[i];
+
+        if (sfx.isDefault && sfx.onSelected && checkRequirements(sfx.requireds)) {
+            if (sfx.groups.length > 0) {
+                if (localChoice.groups && localChoice.groups.length > 0) {
+                    for (let j = 0; j < localChoice.groups.length; j++) {
+                        const group = localChoice.groups[j];
+                        if (sfx.groups.indexOf(group) !== -1) {
+                            playSfx(sfx);
+                            return;
+                        }
+                    }
+                }
+            } else {
+                playSfx(sfx);
+                return;
+            }
+        }
+    }
+}
+export function playSfxOnDeselect(localChoice: Choice | SelectableAddon) {
+    if (typeof app.soundEffects === 'undefined' || app.soundEffects.length === 0) return;
+    if (localChoice.useSfx && localChoice.sfxId && localChoice.sfxOnDeselect) {
+        const sfx = sfxMap.get(localChoice.sfxId);
+
+        if (typeof sfx !== 'undefined') {
+            playSfx(sfx);
+            return;
+        }
+    }
+    for (let i = 0; i < app.soundEffects.length; i++) {
+        const sfx = app.soundEffects[i];
+
+        if (sfx.isDefault && sfx.onDeselected && checkRequirements(sfx.requireds)) {
+            if (sfx.groups.length > 0) {
+                if (localChoice.groups && localChoice.groups.length > 0) {
+                    for (let j = 0; j < localChoice.groups.length; j++) {
+                        const group = localChoice.groups[j];
+                        if (sfx.groups.indexOf(group) !== -1) {
+                            playSfx(sfx);
+                            return;
+                        }
+                    }
+                }
+            } else {
+                playSfx(sfx);
+                return;
+            }
+        }
+    }
 }
 export function initStyling(styling: any, oldVersion: boolean, isMain = false) {
     if (typeof styling !== 'undefined') {
@@ -3530,7 +3624,7 @@ function checkAddons(localChoice: Choice, localRow: Row, options: ChoiceOptions)
         const sAddons = localChoice.addons.filter(item => item.isSelectable === true);
 
         for (let i = 0; i < sAddons.length; i++) {
-            const addon = sAddons[i] as SelectableAddon;
+            const addon = sAddons[i];
 
             if (addon.isActive) {
                 if (addon.selectOnce) return false;
@@ -3554,12 +3648,59 @@ function checkAddons(localChoice: Choice, localRow: Row, options: ChoiceOptions)
     }
     return true;
 }
-export function setScoreValue(point: PointType, score: Score) {
+export function setScoreValue(point: PointType, score: Score, isMul: boolean = false) {
     if (score.isRandom) {
-        if (typeof score.maxValue !== 'undefined' && typeof score.minValue !== 'undefined') {
+        if (score.useExpression && score.expMinValue && score.expMaxValue) {
+            try {
+                const minReplaced = score.expMinValue.replace(/\{([^{}]+)\}/g, (_, vStr) => {
+                    const vPoint = pointTypeMap.get(vStr);
+                    if (typeof vPoint !== 'undefined') {
+                        return `${vPoint.startingSum}`;
+                    }
+                    throw new Error(`Undefined variable: "${vStr}"`);
+                });
+                const maxReplaced = score.expMaxValue.replace(/\{([^{}]+)\}/g, (_, vStr) => {
+                    const vPoint = pointTypeMap.get(vStr);
+                    if (typeof vPoint !== 'undefined') {
+                        return `${vPoint.startingSum}`;
+                    }
+                    throw new Error(`Undefined variable: "${vStr}"`);
+                });
+                const minValue = evaluate(minReplaced);
+                const maxValue = evaluate(maxReplaced);
+                score.value = Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue;
+                score.value = point.allowFloat ? score.value : Math.floor(score.value);
+                score.setValue = true;
+                if (isMul) {
+                    if (typeof score.mulValue === 'undefined') score.mulValue = [];
+                    score.mulValue.push(score.value);
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        } else if (typeof score.maxValue !== 'undefined' && typeof score.minValue !== 'undefined') {
             score.value = Math.floor(Math.random() * (score.maxValue - score.minValue + 1)) + score.minValue;
             score.value = point.allowFloat ? score.value : Math.floor(score.value);
             score.setValue = true;
+        }
+    } else if (score.useExpression && score.expValue) {
+        try {
+            const replaced = score.expValue.replace(/\{([^{}]+)\}/g, (_, vStr) => {
+                const vPoint = pointTypeMap.get(vStr);
+                if (typeof vPoint !== 'undefined') {
+                    return `${vPoint.startingSum}`;
+                }
+                throw new Error(`Undefined variable: "${vStr}"`);
+            });
+            score.value = evaluate(replaced);
+            score.value = point.allowFloat ? score.value : Math.floor(score.value);
+            score.setValue = true;
+            if (isMul) {
+                if (typeof score.mulValue === 'undefined') score.mulValue = [];
+                score.mulValue.push(score.value);
+            }
+        } catch (e) {
+            console.error(e);
         }
     }
 }
@@ -3713,6 +3854,12 @@ export function cleanActivated() {
                             case '8':
                                 delete hRow.addonTextRemoved;
                                 break;
+                            case '9':
+                                delete hRow.unselAddonRemoved;
+                                break;
+                            case '10':
+                                delete hRow.unmetAddonRemoved;
+                                break;
                             default:
                                 break;
                         }
@@ -3731,6 +3878,12 @@ export function cleanActivated() {
                         variable.isTrue = false;
                     } else if (cChoice.changeType === '3') {
                         variable.isTrue = !variable.isTrue;
+                    }
+
+                    if (variable.isTrue) {
+                        activatedMap.set(variable.id, {multiple: 0, isVariable: true});
+                    } else {
+                        activatedMap.delete(variable.id);
                     }
                 }
             }
@@ -4602,7 +4755,7 @@ function selectForceRandomActivate(localChoice: Choice | SelectableAddon, option
                 const choiceNum = listMap.get(id) || 0;
                 const rndNum = rndChoice.multipleUseVariable;
                 selectForceActivate(localChoice, rndChoice, rndRow, choiceNum, options);
-                if (!rndChoice.isActive || (rndChoice.isSelectableMultiple && rndChoice.isMultipleUseVariable && rndChoice.multipleUseVariable === rndNum)) {
+                if (!rndChoice.isSelectDelayed && (!rndChoice.isActive || (rndChoice.isSelectableMultiple && rndChoice.isMultipleUseVariable && rndChoice.multipleUseVariable === rndNum))) {
                     if (result.length < actNum && listArray.length > repeatNum) {
                         listArray[i] = listArray[repeatNum++];
                         if (typeof rndChoice.activatedFrom !== 'undefined') {
@@ -4649,8 +4802,9 @@ function deselectUpdateScore(localChoice: Choice | SelectableAddon, tmpScores: T
                 const aScore = aChoice.scores[j];
                 if (!aScore.isNotRecalculatable) {
                     const point = pointTypeMap.get(aScore.id);
+                    const isActive = aChoice.isSelectableMultiple && aChoice.isMultipleUseVariable ? true : aScore.isActive;
                     if (typeof point !== 'undefined') {
-                        if (localChoice.discountOther && aScore.isChangeDiscount && aScore.isActive && typeof aScore.tmpDisScore !== 'undefined') {
+                        if (localChoice.discountOther && aScore.isChangeDiscount && isActive && typeof aScore.tmpDisScore !== 'undefined') {
                             if (!localChoice.useDiscountCount || (localChoice.useDiscountCount && localChoice.appliedDisChoices)) {
                                 const mul = aChoice.multipleUseVariable;
                                 let remainDiscount = false;
@@ -4682,8 +4836,9 @@ function deselectUpdateScore(localChoice: Choice | SelectableAddon, tmpScores: T
                                 }
 
                                 if (aChoice.isSelectableMultiple && aChoice.isMultipleUseVariable && typeof aChoice.numMultipleTimesMinus !== 'undefined') {
+                                    let isChangedMul = false;
                                     for (let k = mul - 1; k >= 0; k--) {
-                                        if (aChoice.isActive) {
+                                        if (aChoice.isActive && aScore.isActiveMul && aScore.isActiveMul[k]) {
                                             if (point.belowZeroNotAllowed && point.startingSum + aScore.tmpDisScore < 0) {
                                                 if (aChoice.forcedActivated && aChoice.isActive) {
                                                     aChoice.forcedActivated = false;
@@ -4696,6 +4851,7 @@ function deselectUpdateScore(localChoice: Choice | SelectableAddon, tmpScores: T
                                             } else {
                                                 point.startingSum += aScore.tmpDisScore;
                                             }
+                                            isChangedMul = true;
                                         }
                                     }
 
@@ -4703,6 +4859,11 @@ function deselectUpdateScore(localChoice: Choice | SelectableAddon, tmpScores: T
                                         thisTmpScores.set(aScore.id, aScore.tmpDisScore);
                                         delete aScore.isChangeDiscount;
                                         delete aScore.tmpDisScore;
+                                    }
+                                    if (isChangedMul) {
+                                        isChanged = localChoice.id !== aChoice.id;
+                                        if (!aScore.discountIsOn) delete aScore.appliedDiscount;
+                                        isRevoked = true;
                                     }
                                 } else if (!aChoice.isSelectableMultiple) {
                                     if (point.belowZeroNotAllowed && point.startingSum + aScore.tmpDisScore < 0) {
@@ -4723,13 +4884,25 @@ function deselectUpdateScore(localChoice: Choice | SelectableAddon, tmpScores: T
                                         delete aScore.isChangeDiscount;
                                         delete aScore.tmpDisScore;
                                     }
+                                    isChanged = localChoice.id !== aChoice.id;
+                                    if (!aScore.discountIsOn) delete aScore.appliedDiscount;
+                                    isRevoked = true;
                                 }
-                                isChanged = localChoice.id !== aChoice.id;
-                                if (!aScore.discountIsOn) delete aScore.appliedDiscount;
-                                isRevoked = true;
                             }
                         }
                         if (!changedScores.has(aScore.idx)) {
+                            if (aScore.useExpression) {
+                                const oldVal = aScore.value;
+                                
+                                setScoreValue(point, aScore, aChoice.isSelectableMultiple && aChoice.isMultipleUseVariable);
+                                if (oldVal !== aScore.value) {
+                                    point.startingSum += oldVal - aScore.value;
+                                    if (!isChanged) {
+                                        isChanged = true;
+                                    }
+                                    changedScores.add(aScore.idx);
+                                }
+                            }
                             const hasScore = localChoice.scores.length > 0;
                             const scoreLeng = localChoice.scores.length || 1;
                             for (let k = 0; k < scoreLeng; k++) {
@@ -4747,7 +4920,7 @@ function deselectUpdateScore(localChoice: Choice | SelectableAddon, tmpScores: T
                                         aRow.currentChoices -= 1;
                                         if (lPoint) lPoint.startingSum -= tmpScore;
                                         if (beforeDeselected !== afterDeselected) {
-                                            if (!aScore.setValue) setScoreValue(point, aScore);
+                                            if (!aScore.setValue) setScoreValue(point, aScore, aChoice.isSelectableMultiple && aChoice.isMultipleUseVariable);
                                             let scoreVal = aScore.discountIsOn && typeof aScore.discountScore !== 'undefined' && aScore.appliedDiscount ? aScore.discountScore : aScore.value;
                                             scoreVal = point.allowFloat ? scoreVal : Math.floor(scoreVal);
                                             let isApplied = false;
@@ -4943,17 +5116,19 @@ export function selectUpdateScore(localChoice: Choice | SelectableAddon | null, 
             if (localChoice && localChoice.useDiscountCount && !localChoice.appliedDisChoices) localChoice.appliedDisChoices = [];
             for (let j = 0; j < aChoice.scores.length; j++) {
                 const aScore = aChoice.scores[j];
+                const isActive = aChoice.isSelectableMultiple && aChoice.isMultipleUseVariable ? true : aScore.isActive;
                 if (!aScore.isNotRecalculatable) {
                     const point = pointTypeMap.get(aScore.id);
                     if (typeof point !== 'undefined') {
-                        if (localChoice && localChoice.discountOther && aScore.isChangeDiscount && aScore.isActive && typeof aScore.tmpDisScore !== 'undefined' && aChoice.id !== localChoice.id) {
+                        if (localChoice && localChoice.discountOther && aScore.isChangeDiscount && isActive && typeof aScore.tmpDisScore !== 'undefined' && aChoice.id !== localChoice.id) {
                             const mul = aChoice.multipleUseVariable;
                             const count = localChoice.isSelectableMultiple && localChoice.isMultipleUseVariable && localChoice.stackableDiscount && localChoice.discountCount ? localChoice.discountCount * localChoice.multipleUseVariable : localChoice.discountCount;
 
                             if (!localChoice.useDiscountCount || (localChoice.useDiscountCount && count && count > localChoice.appliedDisChoices!.length)) {
                                 if (aChoice.isSelectableMultiple && aChoice.isMultipleUseVariable && typeof aChoice.numMultipleTimesMinus !== 'undefined') {
+                                    let isChangedMul = false;
                                     for (let k = mul - 1; k >= 0; k--) {
-                                        if (aChoice.isActive) {
+                                        if (aChoice.isActive && aScore.isActiveMul && aScore.isActiveMul[k]) {
                                             if (point.belowZeroNotAllowed && point.startingSum + aScore.tmpDisScore < 0) {
                                                 if (aChoice.forcedActivated && aChoice.isActive) {
                                                     aChoice.forcedActivated = false;
@@ -4966,6 +5141,7 @@ export function selectUpdateScore(localChoice: Choice | SelectableAddon | null, 
                                             } else {
                                                 point.startingSum += aScore.tmpDisScore;
                                             }
+                                            isChangedMul = true;
                                         }
                                     }
 
@@ -4973,6 +5149,11 @@ export function selectUpdateScore(localChoice: Choice | SelectableAddon | null, 
                                         thisTmpScores.set(aScore.id, aScore.tmpDisScore);
                                         delete aScore.isChangeDiscount;
                                         delete aScore.tmpDisScore;
+                                        aScore.appliedDiscount = true;
+                                        isDiscounted = true;
+                                    }
+                                    if (isChangedMul) {
+                                        isChanged = true;
                                     }
                                 } else if (!aChoice.isSelectableMultiple) {
                                     if (point.belowZeroNotAllowed && point.startingSum + aScore.tmpDisScore < 0) {
@@ -4984,15 +5165,27 @@ export function selectUpdateScore(localChoice: Choice | SelectableAddon | null, 
                                         delete aScore.isChangeDiscount;
                                         delete aScore.tmpDisScore;
                                     }
-                                }
-                                isChanged = true;
-                                if (aChoice.isActive) {
-                                    aScore.appliedDiscount = true;
-                                    isDiscounted = true;
+                                    isChanged = true;
+                                    if (aChoice.isActive) {
+                                        aScore.appliedDiscount = true;
+                                        isDiscounted = true;
+                                    }
                                 }
                             }
                         }
                         if (!changedScores.has(aScore.idx)) {
+                            if (aScore.useExpression) {
+                                const oldVal = aScore.value;
+                                
+                                setScoreValue(point, aScore, aChoice.isSelectableMultiple && aChoice.isMultipleUseVariable);
+                                if (oldVal !== aScore.value) {
+                                    point.startingSum += oldVal - aScore.value;
+                                    if (!isChanged) {
+                                        isChanged = true;
+                                    }
+                                    changedScores.add(aScore.idx);
+                                }
+                            }
                             const hasScore = localChoice && localChoice.scores.length > 0;
                             const scoreLeng = localChoice && localChoice.scores.length || 1;
                             for (let k = 0; k < scoreLeng; k++) {
@@ -5020,7 +5213,7 @@ export function selectUpdateScore(localChoice: Choice | SelectableAddon | null, 
                                             rPoint.startingSum += tmpPoint;
                                         }
                                         if (beforeSelected !== afterSelected) {
-                                            if (!aScore.setValue) setScoreValue(point, aScore);
+                                            if (!aScore.setValue) setScoreValue(point, aScore, aChoice.isSelectableMultiple && aChoice.isMultipleUseVariable);
                                             let scoreVal = aScore.discountIsOn && typeof aScore.discountScore !== 'undefined' && aScore.appliedDiscount ? aScore.discountScore : aScore.value;
                                             scoreVal = point.allowFloat ? scoreVal : Math.floor(scoreVal);
                                             let isApplied = false;
@@ -5210,11 +5403,12 @@ export function activateTempChoices(options: ChoiceOptions) {
 }
 
 export function deselectObject(localChoice: Choice | SelectableAddon, localRow: Row, options: ChoiceOptions) {
-    const isChoice = typeof localChoice.parentId === 'undefined';
+    const isChoice = typeof localChoice.parentId === 'undefined' || localChoice.countAsChoice;
     const pointCheck = checkPoints(localChoice, false);
     const addonCheck = isChoice ? checkAddons(localChoice as Choice, localRow, options) : true;
     if (pointCheck && addonCheck) {
         const deselectProcess = () => {
+            playSfxOnDeselect(localChoice);
             const tmpScores = new SvelteMap<string, number>();
             let countSet = new Set<Choice | SelectableAddon>();
             for (let i = 0; i < localChoice.scores.length; i++) {
@@ -5562,6 +5756,12 @@ export function deselectObject(localChoice: Choice | SelectableAddon, localRow: 
                         } else if (localChoice.changeType === '3') {
                             variable.isTrue = !variable.isTrue;
                         }
+
+                        if (variable.isTrue) {
+                            activatedMap.set(variable.id, {multiple: 0, isVariable: true});
+                        } else {
+                            activatedMap.delete(variable.id);
+                        }
                     }
                 }
             }
@@ -5841,6 +6041,12 @@ export function deselectObject(localChoice: Choice | SelectableAddon, localRow: 
                                 case '8':
                                     delete hRow.addonTextRemoved;
                                     break;
+                                case '9':
+                                    delete hRow.unselAddonRemoved;
+                                    break;
+                                case '10':
+                                    delete hRow.unmetAddonRemoved;
+                                    break;
                                 default:
                                     break;
                             }
@@ -6035,7 +6241,7 @@ export function deselectObject(localChoice: Choice | SelectableAddon, localRow: 
 }
 
 export function selectObject(localChoice: Choice | SelectableAddon, localRow: Row, options: ChoiceOptions) {
-    const isChoice = typeof localChoice.parentId === 'undefined';
+    const isChoice = typeof localChoice.parentId === 'undefined' || localChoice.countAsChoice;
     let selectable = true;
 
     if (isChoice && localRow.allowedChoices > 0 && localRow.currentChoices >= localRow.allowedChoices) {
@@ -6043,7 +6249,7 @@ export function selectObject(localChoice: Choice | SelectableAddon, localRow: Ro
         for (let i = 0; i < localRow.objects.length; i++) {
             const thisChoice = localRow.objects[i];
             if (thisChoice.isActive) {
-                if (!thisChoice.forcedActivated && !thisChoice.selectOnce) {
+                if (!thisChoice.forcedActivated && !thisChoice.selectOnce && thisChoice.id !== localChoice.parentId) {
                     if (thisChoice.isSelectableMultiple) {
                         let counter = thisChoice.multipleUseVariable;
                         for (let j = 0; j < counter; j++) {
@@ -6067,6 +6273,7 @@ export function selectObject(localChoice: Choice | SelectableAddon, localRow: Ro
         const pointCheck = checkPoints(localChoice, true);
         if (pointCheck) {
             const selectProcess = () => {
+                playSfxOnSelect(localChoice);
                 const tmpScores = new SvelteMap<string, number>();
 
                 localChoice.isActive = true;
@@ -6413,6 +6620,12 @@ export function selectObject(localChoice: Choice | SelectableAddon, localRow: Ro
                             } else if (localChoice.changeType === '3') {
                                 variable.isTrue = !variable.isTrue;
                             }
+
+                            if (variable.isTrue) {
+                                activatedMap.set(variable.id, {multiple: 0, isVariable: true});
+                            } else {
+                                activatedMap.delete(variable.id);
+                            }
                         }
                     }
                 }
@@ -6675,6 +6888,12 @@ export function selectObject(localChoice: Choice | SelectableAddon, localRow: Ro
                                         break;
                                     case '8':
                                         hRow.addonTextRemoved = true;
+                                        break;
+                                    case '9':
+                                        hRow.unselAddonRemoved = true;
+                                        break;
+                                    case '10':
+                                        hRow.unmetAddonRemoved = true;
                                         break;
                                     default:
                                         break;
@@ -7209,6 +7428,12 @@ export function selectedOneMore(localChoice: Choice | SelectableAddon, localRow:
                                 } else if (localChoice.changeType === '3') {
                                     variable.isTrue = !variable.isTrue;
                                 }
+
+                                if (variable.isTrue) {
+                                    activatedMap.set(variable.id, {multiple: 0, isVariable: true});
+                                } else {
+                                    activatedMap.delete(variable.id);
+                                }
                             }
                         }
                     }
@@ -7436,6 +7661,12 @@ export function selectedOneMore(localChoice: Choice | SelectableAddon, localRow:
                                             break;
                                         case '8':
                                             hRow.addonTextRemoved = true;
+                                            break;
+                                        case '9':
+                                            hRow.unselAddonRemoved = true;
+                                            break;
+                                        case '10':
+                                            hRow.unmetAddonRemoved = true;
                                             break;
                                         default:
                                             break;
@@ -7963,6 +8194,12 @@ export function selectedOneLess(localChoice: Choice | SelectableAddon, localRow:
                             } else if (localChoice.changeType === '3') {
                                 variable.isTrue = !variable.isTrue;
                             }
+
+                            if (variable.isTrue) {
+                                activatedMap.set(variable.id, {multiple: 0, isVariable: true});
+                            } else {
+                                activatedMap.delete(variable.id);
+                            }
                         }
                     }
                 }
@@ -8179,28 +8416,34 @@ export function selectedOneLess(localChoice: Choice | SelectableAddon, localRow:
                             for (let j = 0; j < localChoice.hiddenContentsType.length; j++) {
                                 switch (localChoice.hiddenContentsType[j]) {
                                     case '1':
-                                        hRow.objectTitleRemoved = false;
+                                        delete hRow.objectTitleRemoved;
                                         break;
                                     case '2':
-                                        hRow.objectImageRemoved = false;
+                                        delete hRow.objectImageRemoved;
                                         break;
                                     case '3':
-                                        hRow.objectTextRemoved = false;
+                                        delete hRow.objectTextRemoved;
                                         break;
                                     case '4':
-                                        hRow.objectScoreRemoved = false;
+                                        delete hRow.objectScoreRemoved;
                                         break;
                                     case '5':
-                                        hRow.objectRequirementRemoved = false;
+                                        delete hRow.objectRequirementRemoved;
                                         break;
                                     case '6':
-                                        hRow.addonTitleRemoved = false;
+                                        delete hRow.addonTitleRemoved;
                                         break;
                                     case '7':
-                                        hRow.addonImageRemoved = false;
+                                        delete hRow.addonImageRemoved;
                                         break;
                                     case '8':
-                                        hRow.addonTextRemoved = false;
+                                        delete hRow.addonTextRemoved;
+                                        break;
+                                    case '9':
+                                        delete hRow.unselAddonRemoved;
+                                        break;
+                                    case '10':
+                                        delete hRow.unmetAddonRemoved;
                                         break;
                                     default:
                                         break;
@@ -8445,7 +8688,7 @@ function updateScores(localChoice: Choice | SelectableAddon, tmpScores: TempScor
                                         aRow.currentChoices += 1;
                                         if (lPoint) lPoint.startingSum -= tmpScore;
                                         if (beforeSelected !== afterSelected) {
-                                            if (!aScore.setValue) setScoreValue(point, aScore);
+                                            if (!aScore.setValue) setScoreValue(point, aScore, aChoice.isSelectableMultiple && aChoice.isMultipleUseVariable);
                                             let scoreVal = aScore.discountIsOn && aScore.appliedDiscount && typeof aScore.discountScore !== 'undefined' ? aScore.discountScore : aScore.value;
                                             scoreVal = point.allowFloat ? scoreVal : Math.floor(scoreVal);
                                             if (beforeSelected) {
@@ -8955,6 +9198,12 @@ function selectObjectL(str: string, newActivatedList: string[]) {
                     } else if (localChoice.changeType === '3') {
                         variable.isTrue = !variable.isTrue;
                     }
+
+                    if (variable.isTrue) {
+                        activatedMap.set(variable.id, {multiple: 0, isVariable: true});
+                    } else {
+                        activatedMap.delete(variable.id);
+                    }
                 }
             }
         }
@@ -9197,6 +9446,12 @@ function selectObjectL(str: string, newActivatedList: string[]) {
                             case '8':
                                 hRow.addonTextRemoved = true;
                                 break;
+                            case '9':
+                                hRow.unselAddonRemoved = true;
+                                break;
+                            case '10':
+                                hRow.unmetAddonRemoved = true;
+                                break;
                             default:
                                 break;
                         }
@@ -9246,7 +9501,7 @@ function selectedOneMoreL(str: string, newActivatedList: string[]) {
                     score.value = strRSMap.get(i)!;
                     score.setValue = true;
                 } else {
-                    setScoreValue(point, score);
+                    setScoreValue(point, score, true);
                 }
             }
         }
@@ -9578,6 +9833,12 @@ function selectedOneMoreL(str: string, newActivatedList: string[]) {
                         } else if (localChoice.changeType === '3') {
                             variable.isTrue = !variable.isTrue;
                         }
+
+                        if (variable.isTrue) {
+                            activatedMap.set(variable.id, {multiple: 0, isVariable: true});
+                        } else {
+                            activatedMap.delete(variable.id);
+                        }
                     }
                 }
             }
@@ -9809,6 +10070,12 @@ function selectedOneMoreL(str: string, newActivatedList: string[]) {
                                 case '8':
                                     hRow.addonTextRemoved = true;
                                     break;
+                                case '9':
+                                    hRow.unselAddonRemoved = true;
+                                    break;
+                                case '10':
+                                    hRow.unmetAddonRemoved = true;
+                                    break;
                                 default:
                                     break;
                             }
@@ -9969,7 +10236,7 @@ export function duplicateRow(localChoice: Choice | SelectableAddon, localRow: Ro
                 for (let j = 0; j < newChoice.scores.length; j++) {
                     const score = newChoice.scores[j];
 
-                    score.idx = generateScoreId(0, 5);
+                    score.idx = generateId(0, 5, 's');
                     scoreSet.add(score.idx);
                     if (newChoice.isSelectableMultiple) {
                         delete score.isActiveMul;
@@ -10208,7 +10475,7 @@ export function getDataURL(str: string) {
     return match ? match[1] : str;
 }
 export function isDataURL(str: string) {
-    const regex = /^data:[a-zA-Z]+\/[a-zA-Z]+;base64,/;
+    const regex = /^data:.+;base64,/;
     return regex.test(str);
 }
 const filterStylingSchema = z.object({
@@ -10753,6 +11020,118 @@ export function exportData(data: Row | Choice | Addon[] | Score[] | Requireds[],
     snackbarVariables.labelText = `The exported ${type} has been downloaded.`;
     snackbarVariables.isOpen = true;
 }
+const idMaps = new Map<string, string>();
+function importRequirement(req: Requireds) {
+    if (req.reqId !== '') {
+        const newId = idMaps.get(req.reqId);
+        if (typeof newId !== 'undefined') {
+            req.reqId = newId;
+        }
+    }
+    if (req.orRequireds) {
+        for (let i = 0; i < req.orRequireds.length; i++) {
+            const orReq = req.orRequireds[i];
+            const newId = idMaps.get(orReq.reqId);
+            if (typeof newId !== 'undefined') {
+                req.reqId = newId;
+            }
+        }
+    }
+    if (req.requireds) {
+        for (let i = 0; i < req.requireds.length; i++) {
+            const innerReq = req.requireds[i];
+            const newId = idMaps.get(innerReq.reqId);
+            if (typeof newId !== 'undefined') {
+                req.reqId = newId;
+            }
+        }
+    }
+}
+function importChoice(localChoice: Choice | SelectableAddon) {
+    if (typeof localChoice.activateThisChoice !== 'undefined') {
+        const actList = localChoice.activateThisChoice.split(',');
+        const newList: string[] = [];
+
+        for (let i = 0; i < actList.length; i++) {
+            const val = actList[i].split('/ON#');
+            let newId = idMaps.get(val[0]);
+
+            if (typeof newId !== 'undefined') {
+                if (val.length > 1) newId = newId + val[1];
+                newList.push(newId);
+            } else {
+                newList.push(actList[i]);
+            }
+        }
+
+        localChoice.activateThisChoice = newList.join(',');
+    }
+
+    if (typeof localChoice.deactivateThisChoice !== 'undefined') {
+        const actList = localChoice.deactivateThisChoice.split(',');
+        const newList: string[] = [];
+
+        for (let i = 0; i < actList.length; i++) {
+            const val = actList[i].split('/ON#');
+            let newId = idMaps.get(val[0]);
+
+            if (typeof newId !== 'undefined') {
+                if (val.length > 1) newId = newId + val[1];
+                newList.push(newId);
+            } else {
+                newList.push(actList[i]);
+            }
+        }
+
+        localChoice.deactivateThisChoice = newList.join(',');
+    }
+
+    if (typeof localChoice.discountChoices !== 'undefined') {
+        for (let i = 0; i < localChoice.discountChoices.length; i++) {
+            const newId = idMaps.get(localChoice.discountChoices[i]);
+
+            if (typeof newId !== 'undefined') {
+                localChoice.discountChoices[i] = newId;
+            }
+        }
+    }
+
+    if (typeof localChoice.requireds !== 'undefined') {
+        for (let i = 0; i < localChoice.requireds.length; i++) {
+            const req = localChoice.requireds[i];
+
+            importRequirement(req);
+        }
+    }
+
+    if (typeof localChoice.scores !== 'undefined') {
+        for (let i = 0; i < localChoice.scores.length; i++) {
+            const score = localChoice.scores[i];
+            
+            for (let j = 0; j < score.requireds.length; j++) {
+                const req = score.requireds[j];
+
+                importRequirement(req);
+            }
+        }
+    }
+
+    if (typeof localChoice.addons !== 'undefined') {
+        for (let i = 0; i < localChoice.addons.length; i++) {
+            const addon = localChoice.addons[i] as Addon;
+
+            for (let j = 0; j < addon.requireds.length; j++) {
+                const req = addon.requireds[j];
+
+                importRequirement(req);
+            }
+
+            if (addon.isSelectable) {
+                importChoice(addon);
+            }
+        }
+    }
+}
 export async function importData(valueTypeFiles: FileList | null, num: number, type: string, parent: Row | Choice | Addon | null = null) {
     if (valueTypeFiles) {
         const file = valueTypeFiles[0];
@@ -10770,28 +11149,35 @@ export async function importData(valueTypeFiles: FileList | null, num: number, t
                     const parsed = RowSchema.safeParse(cleanedData);
 
                     if (parsed.success) {
-                        const id = generateRowId(0, app.rowIdLength);
                         const clone = parsed.data as Row;
+                        const rowId = clone.id;
 
-                        clone.id = id;
+                        clone.id = checkDupId(rowId, rowMap);
                         app.rows.splice(num, 0, clone);
                         app.rows[num].index = num;
 
-                        rowMap.set(id, app.rows[num]);
+                        rowMap.set(clone.id, app.rows[num]);
+
+                        if (rowId !== clone.id) idMaps.set(clone.id, rowId);
                         
                         for (let i = 0; i < app.rows[num].objects.length; i++) {
                             const cChoice = app.rows[num].objects[i];
+                            const choiceId = cChoice.id;
 
-                            cChoice.id = generateObjectId(0, app.objectIdLength);
+                            cChoice.id = checkDupId(choiceId, choiceMap);
                             cChoice.index = i;
                             cChoice.isActive = false;
                             delete cChoice.forcedActivated;
                             delete cChoice.appliedDisChoices;
 
+                            if (choiceId !== cChoice.id) idMaps.set(cChoice.id, choiceId);
+
+                            choiceMap.set(cChoice.id, {choice: app.rows[num].objects[i], row: app.rows[num]});
+
                             for (let j = 0; j < cChoice.scores.length; j++) {
                                 const score = cChoice.scores[j];
 
-                                score.idx = generateScoreId(0, 5);
+                                score.idx = generateId(0, 5, 's');
                                 scoreSet.add(score.idx);
                                 if (clone.isSelectableMultiple) {
                                     delete score.isActiveMul;
@@ -10805,8 +11191,44 @@ export async function importData(valueTypeFiles: FileList | null, num: number, t
 
                             for (let j = 0; j < cChoice.addons.length; j++) {
                                 const addon = cChoice.addons[j];
+                                const addonId = addon.id;
 
                                 addon.parentId = cChoice.id;
+                                if (addon.isSelectable) {
+                                    addon.id = checkDupId(addonId, choiceMap);
+                                    addon.isActive = false;
+                                    delete addon.forcedActivated;
+                                    delete addon.appliedDisChoices;
+
+                                    if (addonId !== addon.id) idMaps.set(addon.id, addonId);
+
+                                    if (addon.backpackBtnRequirement) {
+                                        if (typeof app.hideBackpackBtn !== 'undefined') {
+                                            app.hideBackpackBtn += 1;
+                                        } else {
+                                            delete addon.backpackBtnRequirement;
+                                        }
+                                    }
+
+                                    if (typeof addon.scores !== 'undefined') {
+                                        for (let j = 0; j < addon.scores.length; j++) {
+                                            const score = addon.scores[j];
+
+                                            score.idx = generateId(0, 5, 's');
+                                            scoreSet.add(score.idx);
+                                            if (addon.isSelectableMultiple) {
+                                                delete score.isActiveMul;
+                                                delete score.isActiveMulMinus;
+                                            } else {
+                                                delete score.isActive;
+                                            }
+                                            delete score.setValue;
+                                            deleteDiscount(score);
+                                        }
+                                    }
+
+                                    choiceMap.set(addon.id, {choice: app.rows[num].objects[i].addons[j] as SelectableAddon, row: app.rows[num]});
+                                }
                             }
 
                             if (cChoice.backpackBtnRequirement) {
@@ -10819,9 +11241,9 @@ export async function importData(valueTypeFiles: FileList | null, num: number, t
 
                             if (cChoice.groups) {
                                 for (let j = 0; j < cChoice.groups.length; j++) {
-                                    let group = groupMap.get(cChoice.groups[j]);
+                                    const group = groupMap.get(cChoice.groups[j]);
                                     if (typeof group !== 'undefined') {
-                                        let elementIndex = group.elements.indexOf(cChoice.id);
+                                        const elementIndex = group.elements.indexOf(cChoice.id);
                                         if (elementIndex === -1) group.elements.push(cChoice.id);
                                     }
                                 }
@@ -10829,22 +11251,20 @@ export async function importData(valueTypeFiles: FileList | null, num: number, t
 
                             if (cChoice.objectDesignGroups) {
                                 for (let j = 0; j < cChoice.objectDesignGroups.length; j++) {
-                                    let dGroup = objectDesignMap.get(cChoice.objectDesignGroups[j]);
+                                    const dGroup = objectDesignMap.get(cChoice.objectDesignGroups[j]);
                                     if (typeof dGroup !== 'undefined') {
-                                        let elementIndex = dGroup.elements.indexOf(cChoice.id);
+                                        const elementIndex = dGroup.elements.indexOf(cChoice.id);
                                         if (elementIndex === -1) dGroup.elements.push(cChoice.id);
                                     }
                                 }
                             }
-
-                            choiceMap.set(cChoice.id, {choice: app.rows[num].objects[i], row: app.rows[num]});
                         }
 
                         if (app.rows[num].groups) {
                             for (let i = 0; i < app.rows[num].groups.length; i++) {
-                                let group = groupMap.get(app.rows[num].groups[i]);
+                                const group = groupMap.get(app.rows[num].groups[i]);
                                 if (typeof group !== 'undefined') {
-                                    let elementIndex = group.rowElements.indexOf(app.rows[num].id);
+                                    const elementIndex = group.rowElements.indexOf(app.rows[num].id);
                                     if (elementIndex === -1) group.rowElements.push(app.rows[num].id);
                                 }
                             }
@@ -10852,9 +11272,9 @@ export async function importData(valueTypeFiles: FileList | null, num: number, t
 
                         if (app.rows[num].rowDesignGroups) {
                             for (let i = 0; i < app.rows[num].rowDesignGroups.length; i++) {
-                                let dGroup = rowDesignMap.get(app.rows[num].rowDesignGroups[i]);
+                                const dGroup = rowDesignMap.get(app.rows[num].rowDesignGroups[i]);
                                 if (typeof dGroup !== 'undefined') {
-                                    let elementIndex = dGroup.elements.indexOf(app.rows[num].id);
+                                    const elementIndex = dGroup.elements.indexOf(app.rows[num].id);
                                     if (elementIndex === -1) dGroup.elements.push(app.rows[num].id);
                                 }
                             }
@@ -10862,6 +11282,12 @@ export async function importData(valueTypeFiles: FileList | null, num: number, t
 
                         for (let i = num + 1; i < app.rows.length; i++) {
                             app.rows[i].index = i;
+                        }
+
+                        for (let i = 0; i < app.rows[num].objects.length; i++) {
+                            const cChoice = app.rows[num].objects[i];
+
+                            importChoice(cChoice);
                         }
 
                         snackbarVariables.labelText = 'Row Imported successfully.';
@@ -10875,18 +11301,21 @@ export async function importData(valueTypeFiles: FileList | null, num: number, t
                         const parsed = ChoiceSchema.safeParse(cleanedData);
 
                         if (parsed.success) {
-                            const id = generateObjectId(0, app.objectIdLength);
                             const row = parent as Row;
                             const clone = parsed.data as Choice;
+                            const choiceId = clone.id;
                             
                             clone.isActive = false;
-                            clone.id = id;
+                            clone.id = checkDupId(choiceId, choiceMap);
                             delete clone.forcedActivated;
+                            delete clone.appliedDisChoices;
+
+                            if (choiceId !== clone.id) idMaps.set(clone.id, choiceId);
 
                             for (let i = 0; i < clone.scores.length; i++) {
                                 const score = clone.scores[i];
 
-                                score.idx = generateScoreId(0, 5);
+                                score.idx = generateId(0, 5, 's');
                                 scoreSet.add(score.idx);
                                 if (clone.isSelectableMultiple) {
                                     delete score.isActiveMul;
@@ -10900,8 +11329,42 @@ export async function importData(valueTypeFiles: FileList | null, num: number, t
 
                             for (let i = 0; i < clone.addons.length; i++) {
                                 const addon = clone.addons[i];
+                                const addonId = addon.id;
 
                                 addon.parentId = clone.id;
+                                if (addon.isSelectable) {
+                                    addon.id = checkDupId(addonId, choiceMap);
+                                    addon.isActive = false;
+                                    delete addon.forcedActivated;
+                                    delete addon.appliedDisChoices;
+
+                                    if (addonId !== addon.id) idMaps.set(addon.id, addonId);
+
+                                    if (addon.backpackBtnRequirement) {
+                                        if (typeof app.hideBackpackBtn !== 'undefined') {
+                                            app.hideBackpackBtn += 1;
+                                        } else {
+                                            delete addon.backpackBtnRequirement;
+                                        }
+                                    }
+
+                                    if (typeof addon.scores !== 'undefined') {
+                                        for (let j = 0; j < addon.scores.length; j++) {
+                                            const score = addon.scores[j];
+
+                                            score.idx = generateId(0, 5, 's');
+                                            scoreSet.add(score.idx);
+                                            if (addon.isSelectableMultiple) {
+                                                delete score.isActiveMul;
+                                                delete score.isActiveMulMinus;
+                                            } else {
+                                                delete score.isActive;
+                                            }
+                                            delete score.setValue;
+                                            deleteDiscount(score);
+                                        }
+                                    }
+                                }
                             }
 
                             if (clone.backpackBtnRequirement) {
@@ -10913,23 +11376,28 @@ export async function importData(valueTypeFiles: FileList | null, num: number, t
                             }
 
                             row.objects.splice(num, 0, clone);
-                            choiceMap.set(id, {choice: row.objects[num], row: row});
+                            choiceMap.set(clone.id, {choice: row.objects[num], row: row});
+                            for (let i = 0; i < clone.addons.length; i++) {
+                                const addon = clone.addons[i];
+
+                                if (addon.isSelectable) choiceMap.set(addon.id, {choice: row.objects[num].addons[i] as SelectableAddon, row: row});
+                            }
 
                             if (clone.groups) {
                                 for (let i = 0; i < clone.groups.length; i++) {
-                                    let group = groupMap.get(clone.groups[i]);
+                                    const group = groupMap.get(clone.groups[i]);
                                     if (typeof group !== 'undefined') {
-                                        let elementIndex = group.elements.indexOf(id);
-                                        if (elementIndex === -1) group.elements.push(id);
+                                        const elementIndex = group.elements.indexOf(clone.id);
+                                        if (elementIndex === -1) group.elements.push(clone.id);
                                     }
                                 }
                             }
                             if (clone.objectDesignGroups) {
                                 for (let i = 0; i < clone.objectDesignGroups.length; i++) {
-                                    let dGroup = objectDesignMap.get(clone.objectDesignGroups[i]);
+                                    const dGroup = objectDesignMap.get(clone.objectDesignGroups[i]);
                                     if (typeof dGroup !== 'undefined') {
-                                        let elementIndex = dGroup.elements.indexOf(id);
-                                        if (elementIndex === -1) dGroup.elements.push(id);
+                                        const elementIndex = dGroup.elements.indexOf(clone.id);
+                                        if (elementIndex === -1) dGroup.elements.push(clone.id);
                                     }
                                 }
                             }
@@ -10937,6 +11405,8 @@ export async function importData(valueTypeFiles: FileList | null, num: number, t
                             for (let i = num; i < row.objects.length; i++) {
                                 row.objects[i].index = i;
                             }
+
+                            importChoice(row.objects[num]);
 
                             snackbarVariables.labelText = 'Choice Imported successfully.';
                             snackbarVariables.isOpen = true;
@@ -10949,14 +11419,69 @@ export async function importData(valueTypeFiles: FileList | null, num: number, t
 
                         if (parsed.success) {
                             const clone = parsed.data as Addon[];
-                            
-                            for (let i = 0; i < clone.length; i++) {
-                                clone[i].parentId = parent.id;
-                            }
-                            (parent as Choice).addons.push(...clone);
+                            const choice = parent as Choice;
+                            const cMap = choiceMap.get(choice.id);
+                            if (typeof cMap !== 'undefined') {
+                                const row = cMap.row;
 
-                            snackbarVariables.labelText = 'Addon Imported successfully.';
-                            snackbarVariables.isOpen = true;
+                                for (let i = 0; i < clone.length; i++) {
+                                    const addon = clone[i];
+                                    const addonId = addon.id;
+
+                                    clone[i].parentId = parent.id;
+
+                                    if (addon.isSelectable) {
+                                        addon.id = checkDupId(addonId, choiceMap);
+                                        addon.isActive = false;
+                                        delete addon.forcedActivated;
+                                        delete addon.appliedDisChoices;
+
+                                        if (addonId !== addon.id) idMaps.set(addon.id, addonId);
+
+                                        if (addon.backpackBtnRequirement) {
+                                            if (typeof app.hideBackpackBtn !== 'undefined') {
+                                                app.hideBackpackBtn += 1;
+                                            } else {
+                                                delete addon.backpackBtnRequirement;
+                                            }
+                                        }
+
+                                        if (typeof addon.scores !== 'undefined') {
+                                            for (let j = 0; j < addon.scores.length; j++) {
+                                                const score = addon.scores[j];
+
+                                                score.idx = generateId(0, 5, 's');
+                                                scoreSet.add(score.idx);
+                                                if (addon.isSelectableMultiple) {
+                                                    delete score.isActiveMul;
+                                                    delete score.isActiveMulMinus;
+                                                } else {
+                                                    delete score.isActive;
+                                                }
+                                                delete score.setValue;
+                                                deleteDiscount(score);
+                                            }
+                                        }
+                                    }
+
+                                    choice.addons.push(addon);
+                                    if (addon.isSelectable) choiceMap.set(addon.id, {choice: choice.addons[i] as SelectableAddon, row: row});
+                                }
+
+                                for (let i = num; i < choice.addons.length; i++) {
+                                    const addon = choice.addons[i];
+
+                                    if (addon.isSelectable) {
+                                        importChoice(addon);
+                                    }
+                                }
+
+                                snackbarVariables.labelText = 'Addon Imported successfully.';
+                                snackbarVariables.isOpen = true;
+                            } else {
+                                snackbarVariables.labelText = 'Failed Import Addon.';
+                                snackbarVariables.isOpen = true;
+                            }
                         } else {
                             throw parsed.error;
                         }
@@ -10966,11 +11491,24 @@ export async function importData(valueTypeFiles: FileList | null, num: number, t
 
                         if (parsed.success) {
                             const clone = parsed.data as Score[];
+                            const choice = parent as Choice;
 
                             for (let i = 0; i < clone.length; i++) {
-                                deleteDiscount(clone[i]);
+                                const score = clone[i];
+
+                                score.idx = generateId(0, 5, 's');
+                                scoreSet.add(score.idx);
+                                if (choice.isSelectableMultiple) {
+                                    delete score.isActiveMul;
+                                    delete score.isActiveMulMinus;
+                                } else {
+                                    delete score.isActive;
+                                }
+                                delete score.setValue;
+                                deleteDiscount(score);
+
+                                choice.scores.push(score);
                             }
-                            (parent as Choice).scores.push(...clone);
                             snackbarVariables.labelText = 'Score Imported successfully.';
                             snackbarVariables.isOpen = true;
                         } else {
@@ -10997,6 +11535,7 @@ export async function importData(valueTypeFiles: FileList | null, num: number, t
             } finally {
                 menuVariables.importType = '';
                 menuVariables.parent = null;
+                idMaps.clear();
             }
         }
         
@@ -11020,6 +11559,9 @@ function getMimeFromBlob(str: string) {
 }
 export function initializeApp(tempApp: any) {
     musicPlayer.set(null);
+    audioBuffers.clear();
+    audioContext = null;
+    initPromise = null;
     cleanActivated();
     if (typeof tempApp.useTextEditor === 'undefined') tempApp.useTextEditor = false;
     const keys = Object.keys(tempApp);
@@ -11116,6 +11658,8 @@ export function initializeApp(tempApp: any) {
                                         }
                                     }
                                 }
+                            } else {
+                                req.requireds = [];
                             }
                         }
                     }
@@ -11246,6 +11790,8 @@ export function initializeApp(tempApp: any) {
                                                 }
                                             }
                                         }
+                                    } else {
+                                        kScore.requireds = [];
                                     }
                                 }
                             }
@@ -11311,6 +11857,8 @@ export function initializeApp(tempApp: any) {
                                         }
                                     }
                                 }
+                            } else {
+                                kObj.requireds = [];
                             }
 
                             for (let k = 0; k < kObj.addons.length; k++) {
@@ -11380,6 +11928,8 @@ export function initializeApp(tempApp: any) {
                                             }
                                         }
                                     }
+                                } else {
+                                    kAddon.requireds = [];
                                 }
                             }
                         }
@@ -11499,6 +12049,8 @@ export function initializeApp(tempApp: any) {
                                 }
                             }
                         }
+                    } else {
+                        gReq.requireds = [];
                     }
                 }
             } else if (key === 'words') {
@@ -11528,6 +12080,7 @@ export function initializeApp(tempApp: any) {
     mdObjects.splice(0);
     scoreSet.clear();
     categoryMap.clear();
+    sfxMap.clear();
 
     if (bgmVariables.bgmTitleInterval !== 0) {
         window.clearInterval(bgmVariables.bgmTitleInterval);
@@ -11579,35 +12132,43 @@ export function initializeApp(tempApp: any) {
         app[key] = tempApp[key];
     }
 
+    textFonts.splice(0, textFonts.length, 'Times New Roman', 'Arial', 'Roboto', 'Courier New', 'Courier', 'Verdana', 'Georgia', 'Comic Sans MS', 'Candara', 'Arial Black', 'Impact', 'Helvetica', 'Calibri', 'Cambria', 'Trebuchet MS', 'Tahoma');
+
     for (let i = 0; i < app.googleFonts.length; i++) {
         const fontId = app.googleFonts[i].replace(/ /g, '+');
-        const url = `https://fonts.googleapis.com/css2?family=${fontId}&display=swap`;
-        const link = document.createElement('link');
+    
+        if (!document.getElementById(fontId)) {
+            const url = `https://fonts.googleapis.com/css2?family=${fontId}&display=swap`;
+            const link = document.createElement('link');
 
-        link.id = fontId;
-        link.rel = 'stylesheet';
-        link.href = url;
-        link.crossOrigin = 'anonymous';
-        document.head.appendChild(link);
+            link.id = fontId;
+            link.rel = 'stylesheet';
+            link.href = url;
+            link.crossOrigin = 'anonymous';
+            document.head.appendChild(link);
+        }
 
-        textFonts.push(app.googleFonts[i]);
+        if (textFonts.indexOf(app.googleFonts[i]) === -1) textFonts.push(app.googleFonts[i]);
     }
 
     for (let i = 0; i < app.customFonts.length; i++) {
         const url = app.customFonts[i];
-        const link = document.createElement('link');
+
+        if (!document.getElementById(url)) {
+            const link = document.createElement('link');
         
-        link.id = url;
-        link.rel = 'stylesheet';
-        link.href = url;
-        link.crossOrigin = 'anonymous';
-        document.head.appendChild(link);
+            link.id = url;
+            link.rel = 'stylesheet';
+            link.href = url;
+            link.crossOrigin = 'anonymous';
+            document.head.appendChild(link);
+        }
     }
 
     for (let i = 0; i < app.pointTypes.length; i++) {
         const iPoint = app.pointTypes[i];
 
-        if (typeof iPoint.id === 'undefined' || iPoint.id === '') iPoint.id = generatePointTypeId(0, 4);
+        if (typeof iPoint.id === 'undefined' || iPoint.id === '') iPoint.id = generateId(0, 4, 'point');
         iPoint.id = checkDupId(iPoint.id, pointTypeMap);
         if (typeof iPoint.initValue === 'undefined') iPoint.initValue = iPoint.startingSum;
         if (typeof iPoint.isNotShownObjects === 'undefined' && iPoint.activatedId !== '') iPoint.isNotShownObjects = true;
@@ -11618,20 +12179,20 @@ export function initializeApp(tempApp: any) {
     for (let i = 0; i < app.rows.length; i++) {
         const iRow = app.rows[i];
 
-        if (typeof iRow.id === 'undefined' || iRow.id === '') iRow.id = generateRowId(0, 4);
+        if (typeof iRow.id === 'undefined' || iRow.id === '') iRow.id = generateId(0, app.rowIdLength, 'row');
         iRow.id = checkDupId(iRow.id, rowMap);
         rowMap.set(iRow.id, iRow);
         for (let j = 0; j < iRow.objects.length; j++) {
             const iChoice = iRow.objects[j];
 
-            if (typeof iChoice.id === 'undefined' || iChoice.id === '') iChoice.id = generateObjectId(0, 4);
+            if (typeof iChoice.id === 'undefined' || iChoice.id === '') iChoice.id = generateId(0, app.objectIdLength, 'choice');
             iChoice.id = checkDupId(iChoice.id, choiceMap);
             choiceMap.set(iChoice.id, {choice: iChoice, row: iRow});
 
             for (let k = 0; k < iChoice.scores.length; k++) {
                 const iScore = iChoice.scores[k];
 
-                if (typeof iScore.idx === 'undefined' || iScore.idx === '') iScore.idx = generateScoreId(0, 5);
+                if (typeof iScore.idx === 'undefined' || iScore.idx === '') iScore.idx = generateId(0, 5, 's');
                 iScore.idx = checkDupId(iScore.idx, scoreSet);
                 scoreSet.add(iScore.idx);
             }
@@ -11642,13 +12203,13 @@ export function initializeApp(tempApp: any) {
 
                     if (iAddon.isSelectable) {
                         iAddon.id = checkDupId(iAddon.id, choiceMap);
-                        choiceMap.set(iAddon.id, {choice: iAddon as SelectableAddon, row: iRow});
+                        choiceMap.set(iAddon.id, {choice: iAddon, row: iRow});
 
                         if (iAddon.scores && iAddon.scores.length > 0) {
                             for(let l = 0; l < iAddon.scores.length; l++) {
                                 const iScore = iAddon.scores[l];
 
-                                if (typeof iScore.idx === 'undefined' || iScore.idx === '') iScore.idx = generateScoreId(0, 5);
+                                if (typeof iScore.idx === 'undefined' || iScore.idx === '') iScore.idx = generateId(0, 5, 's');
                                 iScore.idx = checkDupId(iScore.idx, scoreSet);
                                 scoreSet.add(iScore.idx);
                             }
@@ -11662,20 +12223,20 @@ export function initializeApp(tempApp: any) {
     for (let i = 0; i < app.backpack.length; i++) {
         const iRow = app.backpack[i];
 
-        if (typeof iRow.id === 'undefined' || iRow.id === '') iRow.id = generateRowId(0, 4);
+        if (typeof iRow.id === 'undefined' || iRow.id === '') iRow.id = generateId(0, app.rowIdLength, 'row');
         iRow.id = checkDupId(iRow.id, rowMap);
         rowMap.set(iRow.id, iRow);
         for (let j = 0; j < iRow.objects.length; j++) {
             const iChoice = iRow.objects[j];
 
-            if (typeof iChoice.id === 'undefined' || iChoice.id === '') iChoice.id = generateObjectId(0, 4);
+            if (typeof iChoice.id === 'undefined' || iChoice.id === '') iChoice.id = generateId(0, app.objectIdLength, 'choice');
             iChoice.id = checkDupId(iChoice.id, choiceMap);
             choiceMap.set(iChoice.id, {choice: iChoice, row: iRow});
 
             for (let k = 0; k < iChoice.scores.length; k++) {
                 const iScore = iChoice.scores[k];
 
-                if (typeof iScore.idx === 'undefined' || iScore.idx === '') iScore.idx = generateScoreId(0, 5);
+                if (typeof iScore.idx === 'undefined' || iScore.idx === '') iScore.idx = generateId(0, 5, 's');
                 iScore.idx = checkDupId(iScore.idx, scoreSet);
                 scoreSet.add(iScore.idx);
             }
@@ -11686,13 +12247,13 @@ export function initializeApp(tempApp: any) {
 
                     if (iAddon.isSelectable) {
                         iAddon.id = checkDupId(iAddon.id, choiceMap);
-                        choiceMap.set(iAddon.id, {choice: iAddon as SelectableAddon, row: iRow});
+                        choiceMap.set(iAddon.id, {choice: iAddon, row: iRow});
 
                         if (iAddon.scores && iAddon.scores.length > 0) {
                             for(let l = 0; l < iAddon.scores.length; l++) {
                                 const iScore = iAddon.scores[l];
 
-                                if (typeof iScore.idx === 'undefined' || iScore.idx === '') iScore.idx = generateScoreId(0, 5);
+                                if (typeof iScore.idx === 'undefined' || iScore.idx === '') iScore.idx = generateId(0, 5, 's');
                                 iScore.idx = checkDupId(iScore.idx, scoreSet);
                                 scoreSet.add(iScore.idx);
                             }
@@ -11706,7 +12267,7 @@ export function initializeApp(tempApp: any) {
     for (let i = 0; i < app.groups.length; i++) {
         const iGroup = app.groups[i];
 
-        if (typeof iGroup.id === 'undefined' || iGroup.id === '') iGroup.id = generateGroupId(0, 4);
+        if (typeof iGroup.id === 'undefined' || iGroup.id === '') iGroup.id = generateId(0, 4, 'group');
         iGroup.id = checkDupId(iGroup.id, groupMap);
         groupMap.set(iGroup.id, app.groups[i]);
 
@@ -11774,7 +12335,7 @@ export function initializeApp(tempApp: any) {
     for (let i = 0; i < app.words.length; i++) {
         const iWord = app.words[i];
 
-        if (typeof iWord.id === 'undefined' || iWord.id === '') iWord.id = generateWordId(0, 4);
+        if (typeof iWord.id === 'undefined' || iWord.id === '') iWord.id = generateId(0, 4, 'word');
         iWord.id = checkDupId(iWord.id, wordMap);
         wordMap.set(iWord.id, app.words[i]);
     }
@@ -11782,7 +12343,7 @@ export function initializeApp(tempApp: any) {
     for (let i = 0; i < app.variables.length; i++) {
         const iVariable = app.variables[i];
 
-        if (typeof iVariable.id === 'undefined' || iVariable.id === '') iVariable.id = generateVariableId(0, 4);
+        if (typeof iVariable.id === 'undefined' || iVariable.id === '') iVariable.id = generateId(0, 4, 'variable');
         iVariable.id = checkDupId(iVariable.id, variableMap);
         variableMap.set(iVariable.id, app.variables[i]);
     }
@@ -11791,7 +12352,7 @@ export function initializeApp(tempApp: any) {
         for (let i = 0; i < app.rowDesignGroups.length; i++) {
             const designGroup = app.rowDesignGroups[i];
 
-            if (typeof designGroup.id === 'undefined' || designGroup.id === '') designGroup.id = generateDesignId(0, 4, true);
+            if (typeof designGroup.id === 'undefined' || designGroup.id === '') designGroup.id = generateId(0, 4, 'design');
             designGroup.id = checkDupId(designGroup.id, rowDesignMap);
 
             for (let j = designGroup.elements.length - 1; j >= 0; j--) {
@@ -11822,7 +12383,7 @@ export function initializeApp(tempApp: any) {
         for (let i = 0; i < app.objectDesignGroups.length; i++) {
             const designGroup = app.objectDesignGroups[i];
 
-            if (typeof designGroup.id === 'undefined' || designGroup.id === '') designGroup.id = generateDesignId(0, 4, false);
+            if (typeof designGroup.id === 'undefined' || designGroup.id === '') designGroup.id = generateId(0, 4, 'design');
             designGroup.id = checkDupId(designGroup.id, objectDesignMap);
 
             for (let j = designGroup.elements.length - 1; j >= 0; j--) {
@@ -11902,6 +12463,15 @@ export function initializeApp(tempApp: any) {
     if (typeof app.isMute !== 'boolean') {
         app.curVolume = 100;
         app.isMute = false;
+    }
+
+    if (typeof app.soundEffects !== 'undefined') {
+        for (let i = 0; i < app.soundEffects.length; i++) {
+            const sfx = app.soundEffects[i];
+
+            loadSfx(sfx.id, sfx.audio);
+            sfxMap.set(sfx.id, sfx);
+        }
     }
 
     window.removeEventListener('keydown', setShortcut);
@@ -11996,6 +12566,10 @@ function replaceImages(imgMap: Map<string, string>) {
                 replaceFields(dGroup.styling, styleKeysToReplace, imgMap);
             }
         }
+    }
+
+    if (typeof app.viewerConfig !== 'undefined') {
+        replaceFields(app.viewerConfig, ['loadingBgImage', 'favicon'], imgMap);
     }
 }
 async function waitForImagesToLoad(container: HTMLElement): Promise<void> {
@@ -12426,7 +13000,7 @@ export function pasteObject(row: Row, num: number) {
         snackbarVariables.labelText = 'The clipboard is empty.';
         snackbarVariables.isOpen = true;
     } else {
-        const id = generateObjectId(0, app.objectIdLength);
+        const id = generateId(0, app.objectIdLength, 'choice');
         const clone: Choice = JSON.parse(JSON.stringify(app.tmpChoice[0]));
         const index = num === -1 ? row.objects.length : num + 1;
         
@@ -12438,7 +13012,7 @@ export function pasteObject(row: Row, num: number) {
         for (let i = 0; i < clone.scores.length; i++) {
             const score = clone.scores[i];
 
-            score.idx = generateScoreId(0, 5);
+            score.idx = generateId(0, 5, 's');
             scoreSet.add(score.idx);
             if (clone.isSelectableMultiple) {
                 delete score.isActiveMul;
@@ -12458,13 +13032,13 @@ export function pasteObject(row: Row, num: number) {
                 addon.isActive = false;
                 delete addon.forcedActivated;
                 delete addon.appliedDisChoices;
-                addon.id = generateObjectId(0, 4, true);
+                addon.id = generateId(0, 4, 'addon');
 
                 if (addon.scores) {
                     for (let j = 0; j < addon.scores.length; j++) {
                         const score = addon.scores[j];
 
-                        score.idx = generateScoreId(0, 5);
+                        score.idx = generateId(0, 5, 's');
                         scoreSet.add(score.idx);
                         if (addon.isSelectableMultiple) {
                             delete score.isActiveMul;
@@ -12497,7 +13071,29 @@ export function pasteObject(row: Row, num: number) {
             for (let i = 0; i < clone.addons.length; i++) {
                 const addon = clone.addons[i];
 
+                addon.parentId = clone.id;
                 if (addon.isSelectable) {
+                    addon.isActive = false;
+                    delete addon.forcedActivated;
+                    delete addon.appliedDisChoices;
+                    addon.id = generateId(0, 4, 'addon');
+
+                    if (addon.scores) {
+                        for (let j = 0; j < addon.scores.length; j++) {
+                            const score = addon.scores[j];
+
+                            score.idx = generateId(0, 5, 's');
+                            scoreSet.add(score.idx);
+                            if (addon.isSelectableMultiple) {
+                                delete score.isActiveMul;
+                                delete score.isActiveMulMinus;
+                            } else {
+                                delete score.isActive;
+                            }
+                            delete score.setValue;
+                            deleteDiscount(score);
+                        }
+                    }
                     choiceMap.set(addon.id, {choice: row.objects[index].addons[i] as SelectableAddon, row: row});
                 }
             }
@@ -12554,6 +13150,10 @@ export function clearClipboard(type: number) {
         case 5:
             app.tmpGroup = [];
             snackbarVariables.labelText = 'Group clipboard cleared.';
+            break;
+        case 6:
+            app.tmpDesignGroup = [];
+            snackbarVariables.labelText = 'Design Group clipboard cleared.';
             break;
     }
     snackbarVariables.isOpen = true;

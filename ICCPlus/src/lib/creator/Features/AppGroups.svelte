@@ -68,7 +68,7 @@
                                             <CustomChipInput acValue={group.rowElements} acOptions={getRows()} inputLabel="Row Id" getLabel={getRowLabel} onSelected={setRowElement} onDeselected={releaseRowElement} selectProp={group} />
                                         </div>
                                         <div class="col-sm-6 col-12">
-                                            <CustomChipInput acValue={group.elements} acOptions={getChoices()} inputLabel="Choice Id" getLabel={getChoiceLabel} onSelected={setChoiceElement} onDeselected={releaseChoiceElement} selectProp={group}/>
+                                            <CustomChipInput acValue={group.elements} acOptions={getSelectables()} inputLabel="Choice Id" getLabel={getChoiceLabel} onSelected={setChoiceElement} onDeselected={releaseChoiceElement} selectProp={group}/>
                                         </div>
                                     </div>
                                 </div>
@@ -76,7 +76,7 @@
                         {/each}
                         {#if gRow.index === groupRows.length - 1}
                             <div class="col-xl-4 col-12">
-                                <button type="button" class="create-box col-12" style="min-height: 290px; font-size: 40px;" onclickcapture={createNewGroup} aria-label="Create New Word">
+                                <button type="button" class="create-box col-12" style="min-height: 290px; font-size: 40px;" onclickcapture={createNewGroup} aria-label="Create New Group">
                                     <i class="mdi mdi-plus-thick"></i>
                                 </button>
                             </div>
@@ -111,7 +111,7 @@
     import Textfield from '$lib/custom/textfield';
     import { Wrapper } from '$lib/custom/tooltip';
     import CustomChipInput from '$lib/store/CustomChipInput.svelte';
-    import { app, checkDupId, choiceMap, groupMap, rowMap, generateGroupId, getRows, getChoices, getRowLabel, getChoiceLabel, scrollToLastRow, categoryMap } from '$lib/store/store.svelte';
+    import { app, checkDupId, choiceMap, groupMap, rowMap, generateId, getRows, getChoices, getRowLabel, getChoiceLabel, scrollToLastRow, categoryMap, getSelectables } from '$lib/store/store.svelte';
     import type { Category, Group } from '$lib/store/types';
     import { createVirtualizer } from '@tanstack/svelte-virtual';
     import { onMount } from 'svelte';
@@ -193,13 +193,22 @@
                         }
                     }
                 }
+                for (let i = 0; i < app.soundEffects.length; i++) {
+                    const sfx = app.soundEffects[i];
+                    for (let j = 0; j < sfx.groups.length; j++) {
+                        if (sfx.groups[j] === groupId) {
+                            sfx.groups[j] = group.id;
+                            break;
+                        }
+                    }
+                }
                 groupId = group.id;
             }
         }
     }
 
     function createNewGroup() {
-        let id = generateGroupId(0, 4);
+        let id = generateId(0, 4, 'group');
         let index = app.groups.length;
         app.groups.push({
             id: id,
@@ -221,7 +230,7 @@
         const group = app.groups[num];
         const clone = JSON.parse(JSON.stringify(group));
         
-        clone.id = generateGroupId(0, 4);
+        clone.id = generateId(0, 4, 'group');
         app.groups.splice(num + 1, 0, clone);
         groupMap.set(clone.id, app.groups[num + 1]);
 
@@ -344,6 +353,15 @@
                 if (!choice.groups.includes(group.id)) {
                     choice.groups.push(group.id);
                     group.elements.push(choice.id);
+                }
+                if (choice.addons) {
+                    for (let j = 0; j < choice.addons.length; j++) {
+                        const addon = choice.addons[j];
+                        if (!addon.groups.includes(group.id)) {
+                            addon.groups.push(group.id);
+                            group.elements.push(addon.id);
+                        }
+                    }
                 }
             }
         }

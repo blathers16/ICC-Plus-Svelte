@@ -129,8 +129,8 @@
     import Switch from '@smui/switch';
     import Textfield from '$lib/custom/textfield';
     import { Wrapper } from '$lib/custom/tooltip';
-    import { app, choiceMap, initStyling, appVersion, getTimestamp, filterStyling, textStyling, objectImageStyling, addonImageStyling, objectStyling, addonStyling, backgroundStyling, multiChoiceStyling,rowStyling, rowImageStyling, backpackStyling, pointBarStyling, rowMap, generateObjectId, getRows, generateScoreId, scoreSet, StylingSchema, snackbarVariables, getRowLabel, objectDesignMap, groupMap, getBackpackRows, deleteDiscount } from '$lib/store/store.svelte';
-    import type { Choice, Styling } from '$lib/store/types';
+    import { app, choiceMap, initStyling, appVersion, getTimestamp, filterStyling, textStyling, objectImageStyling, addonImageStyling, objectStyling, addonStyling, backgroundStyling, multiChoiceStyling,rowStyling, rowImageStyling, backpackStyling, pointBarStyling, rowMap, generateId, getRows, scoreSet, StylingSchema, snackbarVariables, getRowLabel, objectDesignMap, groupMap, getBackpackRows, deleteDiscount } from '$lib/store/store.svelte';
+    import type { Choice, SelectableAddon, Styling } from '$lib/store/types';
     
     let { open, onclose, choice }: { open: boolean; onclose: () => void; choice: Choice } = $props();
     const designMenuComponent = [{
@@ -283,9 +283,9 @@
             const nRow = rowMap.get(newRow);
 
             if (typeof nRow !== 'undefined') {
-                const clone = JSON.parse(JSON.stringify(choice));
+                const clone: Choice = JSON.parse(JSON.stringify(choice));
 
-                clone.id = generateObjectId(0, app.objectIdLength);
+                clone.id = generateId(0, app.objectIdLength, 'choice');
                 clone.index = nRow.objects.length;
                 clone.isActive = false;
                 delete clone.forcedActivated;
@@ -294,7 +294,7 @@
                 for (let i = 0; i < clone.scores.length; i++) {
                     const score = clone.scores[i];
 
-                    score.idx = generateScoreId(0, 5);
+                    score.idx = generateId(0, 5, 's');
                     scoreSet.add(score.idx);
                     delete score.isActive;
                     delete score.setValue;
@@ -312,6 +312,37 @@
                 nRow.objects.push(clone);
                 choiceMap.set(clone.id, {choice: clone, row: nRow});
 
+                if (clone.addons) {
+                    for (let i = 0; i < clone.addons.length; i++) {
+                        const addon = clone.addons[i];
+
+                        addon.parentId = clone.id;
+                        if (addon.isSelectable) {
+                            addon.isActive = false;
+                            delete addon.forcedActivated;
+                            delete addon.appliedDisChoices;
+                            addon.id = generateId(0, app.objectIdLength, 'addon');
+
+                            if (addon.scores) {
+                                for (let j = 0; j < addon.scores.length; j++) {
+                                    const score = addon.scores[j];
+
+                                    score.idx = generateId(0, 5, 's');
+                                    scoreSet.add(score.idx);
+                                    if (addon.isSelectableMultiple) {
+                                        delete score.isActiveMul;
+                                        delete score.isActiveMulMinus;
+                                    } else {
+                                        delete score.isActive;
+                                    }
+                                    delete score.setValue;
+                                    deleteDiscount(score);
+                                }
+                            }
+                            choiceMap.set(addon.id, {choice: clone.addons[i] as SelectableAddon, row: nRow});
+                        }
+                    }
+                }
                 if (clone.groups) {
                     for (let i = 0; i < clone.groups.length; i++) {
                         let group = groupMap.get(clone.groups[i]);

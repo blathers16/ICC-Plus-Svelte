@@ -191,7 +191,7 @@
     import Switch from '@smui/switch';
     import Textfield from '$lib/custom/textfield';
     import { Wrapper } from '$lib/custom/tooltip';
-    import { app, pointTypeMap, generatePointTypeId, dlgVariables, checkDupId, scrollToLastRow, categoryMap } from '$lib/store/store.svelte';
+    import { app, pointTypeMap, generateId, dlgVariables, checkDupId, scrollToLastRow, categoryMap } from '$lib/store/store.svelte';
     import type { Category, PointType } from '$lib/store/types';
     import { onMount } from 'svelte';
     import { createVirtualizer } from '@tanstack/svelte-virtual';
@@ -287,7 +287,7 @@
     }
 
     function clonePointType(point: PointType) {
-        let id = generatePointTypeId(0, 4);
+        let id = generateId(0, 4, 'point');
         let clone = JSON.parse(JSON.stringify(point));
         let num = app.pointTypes.indexOf(point);
         clone.id = id;
@@ -302,7 +302,7 @@
     }
 
     function createNewPointType() {
-        let id = generatePointTypeId(0, 4);
+        let id = generateId(0, 4, 'point');
         app.pointTypes.push({
             id: id,
             name: `Point ${app.pointTypes.length + 1}`,

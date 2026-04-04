@@ -1,8 +1,8 @@
 <Autocomplete
-    options={getGroups()}
+    options={getDesignGroups()}
     getOptionLabel={getGroupLabel}
-    bind:value={choice.groups[index]}
-    label="Group"
+    bind:value={choice.objectDesignGroups![index]}
+    label="Design Group"
     toggle={true}
     showMenuWithNoInput={true}
     textfield$variant="filled"
@@ -13,13 +13,13 @@
 
 <script lang="ts">
     import Autocomplete from '$lib/custom/autocomplete/Autocomplete.svelte';
-    import { groupMap, getGroups } from '$lib/store/store.svelte';
-    import type { Choice, SelectableAddon } from '$lib/store/types';
+    import { getDesignGroups, objectDesignMap } from '$lib/store/store.svelte';
+    import type { Choice } from '$lib/store/types';
 
-    let { choice, index }: { choice: Choice | SelectableAddon; index: number; } = $props();
+    let { choice, index }: { choice: Choice; index: number; } = $props();
 
     function getGroupLabel(str: string) {
-        let group = groupMap.get(str);
+        let group = objectDesignMap.get(str);
         if (typeof group !== 'undefined') {
             return `${group.id} | ${group.name}`;
         }
@@ -27,7 +27,7 @@
     }
 
     function setGroupElement(e: CustomEvent) {
-        let group = groupMap.get(e.detail);
+        let group = objectDesignMap.get(e.detail);
         if (typeof group !== 'undefined') {
             if (group.elements.indexOf(choice.id) === -1) {
                 group.elements.push(choice.id);
@@ -36,7 +36,7 @@
     }
 
     function releaseGroupElement(e: CustomEvent) {
-        let group = groupMap.get(e.detail);
+        let group = objectDesignMap.get(e.detail);
         if (typeof group !== 'undefined') {
             let cIdx = group.elements.indexOf(choice.id);
             if (cIdx !== -1) {

@@ -83,8 +83,8 @@
     import Dialog, { Content, Actions } from '@smui/dialog';
     import IconButton from '@smui/icon-button';
     import { Wrapper } from '$lib/custom/tooltip';
-    import { app, generateRowId, rowMap, choiceMap, dlgVariables, activatedMap, tmpActivatedMap, generateObjectId, generateScoreId, scoreSet, groupMap, objectDesignMap, rowDesignMap, deleteDiscount } from '$lib/store/store.svelte';
-    import type { Row } from '$lib/store/types';
+    import { app, generateId, rowMap, choiceMap, dlgVariables, activatedMap, tmpActivatedMap, scoreSet, groupMap, objectDesignMap, rowDesignMap, deleteDiscount } from '$lib/store/store.svelte';
+    import type { Row, SelectableAddon } from '$lib/store/types';
     import AppRow from '../AppRow.svelte';
     
     let { open, onclose }: { open: boolean; onclose: () => void } = $props();
@@ -92,7 +92,7 @@
     let mainDiv = $state<HTMLDivElement>();
     
     function cloneRow(row: Row, num: number) {
-        let id = generateRowId(0, app.rowIdLength);
+        let id = generateId(0, app.rowIdLength, 'row');
         let clone: Row = JSON.parse(JSON.stringify(row));
 
         clone.id = id;
@@ -103,7 +103,7 @@
         for (let i = 0; i < app.backpack[num + 1].objects.length; i++) {
             const cChoice = app.backpack[num + 1].objects[i];
 
-            cChoice.id = generateObjectId(0, app.objectIdLength);
+            cChoice.id = generateId(0, app.objectIdLength, 'choice');
             cChoice.index = i;
             cChoice.isActive = false;
             delete cChoice.forcedActivated;
@@ -112,17 +112,11 @@
             for (let j = 0; j < cChoice.scores.length; j++) {
                 const score = cChoice.scores[j];
 
-                score.idx = generateScoreId(0, 5);
+                score.idx = generateId(0, 5, 's');
                 scoreSet.add(score.idx);
                 delete score.isActive;
                 delete score.setValue;
                 deleteDiscount(score);
-            }
-
-            for (let j = 0; j < cChoice.addons.length; j++) {
-                const addon = cChoice.addons[j];
-
-                addon.parentId = cChoice.id;
             }
 
             if (cChoice.backpackBtnRequirement) {
@@ -154,6 +148,37 @@
             }
 
             choiceMap.set(cChoice.id, {choice: app.backpack[num + 1].objects[i], row: app.backpack[num + 1]});
+            if (cChoice.addons) {
+                for (let j = 0; j < cChoice.addons.length; j++) {
+                    const addon = cChoice.addons[j];
+
+                    addon.parentId = cChoice.id;
+                    if (addon.isSelectable) {
+                        addon.isActive = false;
+                        delete addon.forcedActivated;
+                        delete addon.appliedDisChoices;
+                        addon.id = generateId(0, app.objectIdLength, 'addon');
+
+                        if (addon.scores) {
+                            for (let k = 0; k < addon.scores.length; k++) {
+                                const score = addon.scores[k];
+
+                                score.idx = generateId(0, 5, 's');
+                                scoreSet.add(score.idx);
+                                if (addon.isSelectableMultiple) {
+                                    delete score.isActiveMul;
+                                    delete score.isActiveMulMinus;
+                                } else {
+                                    delete score.isActive;
+                                }
+                                delete score.setValue;
+                                deleteDiscount(score);
+                            }
+                        }
+                        choiceMap.set(addon.id, {choice: app.backpack[num + 1].objects[i].addons[j] as SelectableAddon, row: app.backpack[num + 1]});
+                    }
+                }
+            }
         }
 
         if (clone.groups) {
@@ -182,7 +207,7 @@
     }
 
     function createNewRow(index: number) {
-        let id = generateRowId(0, app.rowIdLength);
+        let id = generateId(0, app.rowIdLength, 'row');
         let idx = app.backpack.length;
         if (index === -1) {
             app.backpack.push({

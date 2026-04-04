@@ -137,6 +137,14 @@
                                     Deselect choices if row doesn't meet requirements
                                 {/snippet}
                             </FormField>
+                            <FormField class="ml-4 mb-3">
+                                <Switch bind:checked={() => row.overrideWidth ?? false, (e) => {row.overrideWidth = e}} onSMUISwitchChange={() => {
+                                    if (!row.overrideWidth) delete row.overrideWidth;
+                                }} color="secondary" class="switch-scale" />
+                                {#snippet label()}
+                                    Always use row's choices per row
+                                {/snippet}
+                            </FormField>
                             {#if row.isResultRow || row.isGroupRow}
                                 <FormField class="ml-4 mb-3">
                                     <Switch bind:checked={() => row.choicesShareTemplate ?? false, (e) => {row.choicesShareTemplate = e}} color="secondary" class="switch-scale" />
@@ -156,13 +164,15 @@
                                             delete row.addonImageRemoved;
                                             delete row.addonTextRemoved;
                                             delete row.textIsRemoved;
+                                            delete row.unselAddonRemoved;
+                                            delete row.unmetAddonRemoved;
                                         }
                                     }} color="secondary" class="switch-scale" />
                                     {#snippet label()}
                                         Hide the contents of choices
                                     {/snippet}
                                 </FormField>
-                                <FormField class="ml-4 mb-3">
+                                <FormField class="ml-4 mb-2">
                                     <Switch bind:checked={() => row.resultShowRowTitle ?? false, (e) => {row.resultShowRowTitle = e}} color="secondary" class="switch-scale" />
                                     {#snippet label()}
                                         Show the title of the row in the choice
@@ -235,6 +245,22 @@
                                 <Switch bind:checked={() => row.addonTextRemoved ?? false, (e) => {row.addonTextRemoved = e}} color="secondary" class="switch-scale" />
                                 {#snippet label()}
                                     Hide the text of addons
+                                {/snippet}
+                            </FormField>
+                        </div>
+                        <div class={col3}>
+                            <FormField class="ml-4 mb-2">
+                                <Switch bind:checked={() => row.unselAddonRemoved ?? false, (e) => {row.unselAddonRemoved = e}} color="secondary" class="switch-scale" />
+                                {#snippet label()}
+                                    Hide the unselected addons
+                                {/snippet}
+                            </FormField>
+                        </div>
+                        <div class={col3}>
+                            <FormField class="ml-4 mb-2">
+                                <Switch bind:checked={() => row.unmetAddonRemoved ?? false, (e) => {row.unmetAddonRemoved = e}} color="secondary" class="switch-scale" />
+                                {#snippet label()}
+                                    Hide the unmet addons
                                 {/snippet}
                             </FormField>
                         </div>
@@ -432,8 +458,8 @@
 	import IconButton from '@smui/icon-button';
     import Textfield from '$lib/custom/textfield';
     import { Wrapper } from '$lib/custom/tooltip';
-    import { app, checkDupId, groupMap, getStyling, objectWidths, rowMap, checkRequirements, pointTypeMap, rowDesignMap, sanitizeArg, checkActivated, globalReqMap, replaceText, choiceMap, objectWidthToNum, generateObjectId, activatedMap, dlgVariables, variableMap, getGroups, winWidth, getGroupLabel, hexToRgba, pasteObject, snackbarVariables, menuVariables, clearClipboard, removeAnchor, exportData, selectUpdateScore, selectedOneMore, selectedOneLess, tmpActivatedMap, deselectObject, activateTempChoices, imgDialog } from '$lib/store/store.svelte';
-    import type { Choice, ChoiceOptions, Requireds, Row } from '$lib/store/types';
+    import { app, checkDupId, groupMap, getStyling, objectWidths, rowMap, checkRequirements, pointTypeMap, rowDesignMap, sanitizeArg, checkActivated, globalReqMap, replaceText, choiceMap, objectWidthToNum, generateId, activatedMap, dlgVariables, variableMap, getGroups, winWidth, getGroupLabel, hexToRgba, pasteObject, snackbarVariables, menuVariables, clearClipboard, removeAnchor, exportData, selectUpdateScore, selectedOneMore, selectedOneLess, tmpActivatedMap, deselectObject, activateTempChoices, imgDialog } from '$lib/store/store.svelte';
+    import type { Choice, ChoiceOptions, Row } from '$lib/store/types';
     import { tooltip } from '$lib/custom/tooltip/store.svelte';
     import { tick } from 'svelte';
     import Tiptap from '$lib/store/Tiptap.svelte';
@@ -782,7 +808,7 @@
     }
 
     function createNewObject() {
-        let id = generateObjectId(0, app.objectIdLength);
+        let id = generateId(0, app.objectIdLength, 'choice');
         let idx = row.objects.length;
         row.objects.push({
             index: idx,

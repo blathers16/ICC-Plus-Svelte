@@ -260,7 +260,7 @@
     import Slider from '@smui/slider';
     import Tooltip, { Wrapper } from '$lib/custom/tooltip';
     import TopAppBar, { Row as AppBarRow, Section as AppBarSection } from '@smui/top-app-bar';
-    import { app, currentComponent, rowMap, choiceMap, activatedMap, cleanActivated, generateRowId, dlgVariables, tmpActivatedMap, bgmVariables, bgmPlayer, toggleTheme, generateScoreId, generateObjectId, scoreSet, checkPointEnable, groupMap, objectDesignMap, rowDesignMap, hexToRgba, useAltMenu, snackbarVariables, menuVariables, removeAnchor, clearClipboard, deleteDiscount, exportData, importData, musicPlayer, wordDialog, imgDialog } from '$lib/store/store.svelte';
+    import { app, currentComponent, rowMap, choiceMap, activatedMap, cleanActivated, generateId, dlgVariables, tmpActivatedMap, bgmVariables, toggleTheme, scoreSet, checkPointEnable, groupMap, objectDesignMap, rowDesignMap, hexToRgba, useAltMenu, snackbarVariables, menuVariables, removeAnchor, clearClipboard, deleteDiscount, exportData, importData, musicPlayer, wordDialog, imgDialog } from '$lib/store/store.svelte';
     import type { Row, SelectableAddon } from '$lib/store/types';
     import AppBuildForm from './AppBuildForm.svelte';
     import AppDesign from './AppDesign.svelte';
@@ -512,7 +512,7 @@
     }
 
     function cloneRow(row: Row, num: number) {
-        let id = generateRowId(0, app.rowIdLength);
+        let id = generateId(0, app.rowIdLength, 'row');
         let clone: Row = JSON.parse(JSON.stringify(row));
 
         clone.id = id;
@@ -523,7 +523,7 @@
         for (let i = 0; i < app.rows[num + 1].objects.length; i++) {
             const cChoice = app.rows[num + 1].objects[i];
 
-            cChoice.id = generateObjectId(0, app.objectIdLength);
+            cChoice.id = generateId(0, app.objectIdLength, 'choice');
             cChoice.index = i;
             cChoice.isActive = false;
             delete cChoice.forcedActivated;
@@ -532,40 +532,11 @@
             for (let j = 0; j < cChoice.scores.length; j++) {
                 const score = cChoice.scores[j];
 
-                score.idx = generateScoreId(0, 5);
+                score.idx = generateId(0, 5, 's');
                 scoreSet.add(score.idx);
                 delete score.isActive;
                 delete score.setValue;
                 deleteDiscount(score);
-            }
-
-            for (let j = 0; j < cChoice.addons.length; j++) {
-                const addon = cChoice.addons[j];
-
-                addon.parentId = cChoice.id;
-                if (addon.isSelectable) {
-                    addon.isActive = false;
-                    delete addon.forcedActivated;
-                    delete addon.appliedDisChoices;
-                    addon.id = generateObjectId(0, 4, true);
-
-                    if (addon.scores) {
-                        for (let k = 0; k < addon.scores.length; k++) {
-                            const score = addon.scores[k];
-
-                            score.idx = generateScoreId(0, 5);
-                            scoreSet.add(score.idx);
-                            if (addon.isSelectableMultiple) {
-                                delete score.isActiveMul;
-                                delete score.isActiveMulMinus;
-                            } else {
-                                delete score.isActive;
-                            }
-                            delete score.setValue;
-                            deleteDiscount(score);
-                        }
-                    }
-                }
             }
 
             if (cChoice.backpackBtnRequirement) {
@@ -601,7 +572,29 @@
                 for (let j = 0; j < cChoice.addons.length; j++) {
                     const addon = cChoice.addons[j];
 
+                    addon.parentId = cChoice.id;
                     if (addon.isSelectable) {
+                        addon.isActive = false;
+                        delete addon.forcedActivated;
+                        delete addon.appliedDisChoices;
+                        addon.id = generateId(0, app.objectIdLength, 'addon');
+
+                        if (addon.scores) {
+                            for (let k = 0; k < addon.scores.length; k++) {
+                                const score = addon.scores[k];
+
+                                score.idx = generateId(0, 5, 's');
+                                scoreSet.add(score.idx);
+                                if (addon.isSelectableMultiple) {
+                                    delete score.isActiveMul;
+                                    delete score.isActiveMulMinus;
+                                } else {
+                                    delete score.isActive;
+                                }
+                                delete score.setValue;
+                                deleteDiscount(score);
+                            }
+                        }
                         choiceMap.set(addon.id, {choice: app.rows[num + 1].objects[i].addons[j] as SelectableAddon, row: app.rows[num + 1]});
                     }
                 }
@@ -634,7 +627,7 @@
     }
 
     function createNewRow(index: number) {
-        let id = generateRowId(0, app.rowIdLength);
+        let id = generateId(0, app.rowIdLength, 'row');
         let idx = app.rows.length;
         if (index === -1) {
             app.rows.push({
@@ -718,7 +711,7 @@
             snackbarVariables.labelText = 'The clipboard is empty.';
             snackbarVariables.isOpen = true;
         } else {
-            let id = generateRowId(0, app.rowIdLength);
+            let id = generateId(0, app.rowIdLength, 'row');
             let clone: Row = JSON.parse(JSON.stringify(app.tmpRow[0]));
             let index = app.rows.length;
 
@@ -734,7 +727,7 @@
             for (let i = 0; i < app.rows[index].objects.length; i++) {
                 const cChoice = app.rows[index].objects[i];
 
-                cChoice.id = generateObjectId(0, app.objectIdLength);
+                cChoice.id = generateId(0, app.objectIdLength, 'choice');
                 cChoice.index = i;
                 cChoice.isActive = false;
                 delete cChoice.forcedActivated;
@@ -743,7 +736,7 @@
                 for (let j = 0; j < cChoice.scores.length; j++) {
                     const score = cChoice.scores[j];
 
-                    score.idx = generateScoreId(0, 5);
+                    score.idx = generateId(0, 5, 's');
                     scoreSet.add(score.idx);
                     delete score.isActive;
                     delete score.setValue;
@@ -755,7 +748,7 @@
 
                     addon.parentId = cChoice.id;
                     if (addon.isSelectable) {
-                        addon.id = generateObjectId(0, 4, true);
+                        addon.id = generateId(0, app.objectIdLength, 'addon');
                         addon.isActive = false;
                         delete addon.forcedActivated;
                         delete addon.appliedDisChoices;
@@ -764,7 +757,7 @@
                             for (let k = 0; k < addon.scores.length; k++) {
                                 const score = addon.scores[k];
 
-                                score.idx = generateScoreId(0, 5);
+                                score.idx = generateId(0, 5, 's');
                                 scoreSet.add(score.idx);
                                 if (addon.isSelectableMultiple) {
                                     delete score.isActiveMul;

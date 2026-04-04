@@ -127,7 +127,7 @@
     import AppPrivateDesign from './AppPrivateDesign.svelte';
     import { Wrapper } from '$lib/custom/tooltip';
     import Textfield from '$lib/custom/textfield/Textfield.svelte';
-    import { app, checkDupId, choiceMap, rowDesignMap, rowMap, objectDesignMap, generateDesignId, getRows, getChoices, getBackpackRows, getBackpackChoices, getGroups, getRowLabel, getChoiceLabel, getGroupLabel, scrollToLastRow, categoryMap, groupMap } from '$lib/store/store.svelte';
+    import { app, checkDupId, choiceMap, rowDesignMap, rowMap, objectDesignMap, generateId, getRows, getChoices, getBackpackRows, getBackpackChoices, getGroups, getRowLabel, getChoiceLabel, getGroupLabel, scrollToLastRow, categoryMap, groupMap } from '$lib/store/store.svelte';
 	import type { RowDesignGroup, ObjectDesignGroup, Category } from '$lib/store/types';
     import { createVirtualizer } from '@tanstack/svelte-virtual';
     import { onMount } from 'svelte';
@@ -219,7 +219,7 @@
     }
 
     function cloneDesign(group: RowDesignGroup | ObjectDesignGroup, num: number) {
-        let id = generateDesignId(0, 4, isRow);
+        let id = generateId(0, 4, 'design');
         let clone = JSON.parse(JSON.stringify(designGroup));
         clone.id = id;
         let designMap = isRow ? rowDesignMap : objectDesignMap;
@@ -254,7 +254,7 @@
     }
     
     function createNewDesignGroup() {
-        let id = generateDesignId(0, 4, isRow);
+        let id = generateId(0, 4, 'design');
         let designMap = isRow ? rowDesignMap : objectDesignMap;
 
         designGroup.push({

@@ -80,7 +80,7 @@
                                                         <AcdContent>
                                                             <div class="row gy-4">
                                                                 {#each req.requireds as required, j}
-                                                                    <div class="{required.requireds.length > 0 || required.type === 'or' ? 'col-12' : 'col-sm-6 col-12'} p-2">
+                                                                    <div class="{(required.requireds && required.requireds.length > 0) || required.type === 'or' ? 'col-12' : 'col-sm-6 col-12'} p-2">
                                                                         <ObjectRequired required={required} isEditModeOn={true} />
                                                                         <Button onclickcapture={() => req.requireds.splice(j, 1)} class="mt-1" variant="raised">
                                                                             <Label>Delete</Label>
@@ -140,7 +140,7 @@
     import Select, { Option } from '$lib/custom/select';
     import Textfield from '$lib/custom/textfield';
     import { Wrapper } from '$lib/custom/tooltip';
-    import { app, categoryMap, checkDupId, globalReqMap, scrollToLastRow } from '$lib/store/store.svelte';
+    import { app, categoryMap, checkDupId, globalReqMap, scrollToLastRow, generateId } from '$lib/store/store.svelte';
 	import type { Category, GlobalRequirement, Requireds } from '$lib/store/types';
     import { createVirtualizer } from '@tanstack/svelte-virtual';
     import { onMount } from 'svelte';
@@ -210,7 +210,7 @@
     }
 
     function cloneReq(req: GlobalRequirement, num: number) {
-        let id = generateReqId(0, 4);
+        let id = generateId(0, 4, 'req');
         let clone = JSON.parse(JSON.stringify(req));
         clone.id = id;
         if (typeof app.globalRequirements !== 'undefined') {
@@ -228,7 +228,7 @@
     }
 
     function createNewGlobalReq() {
-        let id = generateReqId(0, 4);
+        let id = generateId(0, 4, 'req');
         if (typeof app.globalRequirements === 'undefined') app.globalRequirements = [];
         let index = app.globalRequirements.length;
         app.globalRequirements.push({
@@ -256,23 +256,6 @@
             $virtualizer.setOptions({
                 count: rowCount()
             });
-        }
-    }
-
-    function generateReqId(repeated: number, strLength: number) {
-        let id = 'Req-';
-        let str = 'abcdefghijklmnopqrstuvwxyz0123456789';
-        for (var o = 0; o < strLength; o++) {
-            id += str.charAt(Math.floor(Math.random() * str.length));
-        }
-        if (globalReqMap.has(id)) {
-            if (repeated > 2) {
-                return generateReqId(0, ++strLength);
-            } else {
-                return generateReqId(++repeated, strLength);
-            }
-        } else {
-            return id;
         }
     }
 

@@ -6,7 +6,7 @@
             <div class="row row-{row.id} choice-{choice.id} {isActive ? 'choice-selected' : 'choice-unselected'} {isEnabled ? 'choice-enabled' : 'choice-disabled'} {(isActive && filterStyle.selOverlayOnImage) || (!isEnabled && filterStyle.reqOverlayOnImage) ? 'bg-overlay ' : ''}w-100" style={objectBackground} onclickcapture={(e) => activateObject(choice, row, e, true)}>
                 {#if choice.template >= 4 || choice.template === 1 || windowWidth <= 1280 || row.choicesShareTemplate}
                     <div class="d-column w-100 p-0 align-items-center" style={sAddons ? objectFilter : undefined}>
-                        {#if row.resultShowRowTitle}
+                        {#if row.resultShowRowTitle || isSearch}
                             {#key oriTitleKey}
                                 <div class="col-12" style={scoreText}>
                                     {@html DOMPurify.sanitize(oriTitleKey, sanitizeArg)}
@@ -75,9 +75,7 @@
                         {#if nAddons}
                             <div class="row g-0 p-0 w-100{addonJustify}">
                                 {#each nAddons as addon, i}
-                                    {#if app.showAllAddons > 0 || (!addon.hideAddon || choice.isActive) && (addon.showAddon || checkRequirements(addon.requireds))}
-                                        <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} mainDiv={mainDiv} />
-                                    {/if}
+                                    <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} mainDiv={mainDiv} />
                                 {/each}
                             </div>
                         {/if}
@@ -88,9 +86,7 @@
                     {#if sAddons}
                         <div class="row g-0 p-0 w-100{addonJustify}">
                             {#each sAddons as addon, i}
-                                {#if app.showAllAddons > 0 || (!addon.hideAddon || choice.isActive) && (addon.showAddon || checkRequirements(addon.requireds))}
-                                    <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} mainDiv={mainDiv} index={i} list={sAddons as SelectableAddon[]} />
-                                {/if}
+                                <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} mainDiv={mainDiv} index={i} list={sAddons as SelectableAddon[]} />
                             {/each}
                         </div>
                     {/if}
@@ -143,9 +139,7 @@
                                     {#if nAddons}
                                         <div class="row g-0 p-0 col w-100{addonJustify}">
                                             {#each nAddons as addon, i}
-                                                {#if app.showAllAddons > 0 || (!addon.hideAddon || choice.isActive) && (addon.showAddon || checkRequirements(addon.requireds))}
-                                                    <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} mainDiv={mainDiv} />
-                                                {/if}
+                                                <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} mainDiv={mainDiv} />
                                             {/each}
                                         </div>
                                     {/if}
@@ -159,9 +153,7 @@
                                     {#if nAddons}
                                         <div class="row g-0 p-0 col w-100{addonJustify}">
                                             {#each nAddons as addon, i}
-                                                {#if app.showAllAddons > 0 || (!addon.hideAddon || choice.isActive) && (addon.showAddon || checkRequirements(addon.requireds))}
-                                                    <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} mainDiv={mainDiv} />
-                                                {/if}
+                                                <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} mainDiv={mainDiv} />
                                             {/each}
                                         </div>
                                     {/if}
@@ -174,9 +166,7 @@
                         {#if sAddons}
                             <div class="row g-0 p-0 col w-100{addonJustify}">
                                 {#each sAddons as addon, i}
-                                    {#if app.showAllAddons > 0 || (!addon.hideAddon || choice.isActive) && (addon.showAddon || checkRequirements(addon.requireds))}
-                                        <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} mainDiv={mainDiv} index={i} list={sAddons as SelectableAddon[]} />
-                                    {/if}
+                                    <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} mainDiv={mainDiv} index={i} list={sAddons as SelectableAddon[]} />
                                 {/each}
                             </div>
                         {/if}
@@ -219,9 +209,7 @@
                                     {#if nAddons}
                                         <div class="row g-0 p-0 col w-100{addonJustify}">
                                             {#each nAddons as addon, i}
-                                                {#if app.showAllAddons > 0 || (!addon.hideAddon || choice.isActive) && (addon.showAddon || checkRequirements(addon.requireds))}
-                                                    <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} mainDiv={mainDiv} />
-                                                {/if}
+                                                <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} mainDiv={mainDiv} />
                                             {/each}
                                         </div>
                                     {/if}
@@ -244,9 +232,7 @@
                                     {#if nAddons}
                                         <div class="row g-0 p-0 col w-100{addonJustify}">
                                             {#each nAddons as addon, i}
-                                                {#if app.showAllAddons > 0 || (!addon.hideAddon || choice.isActive) && (addon.showAddon || checkRequirements(addon.requireds))}
-                                                    <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} mainDiv={mainDiv} />
-                                                {/if}
+                                                <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} mainDiv={mainDiv} />
                                             {/each}
                                         </div>
                                     {/if}
@@ -259,9 +245,7 @@
                         {#if sAddons}
                             <div class="row g-0 p-0 col w-100{addonJustify}">
                                 {#each sAddons as addon, i}
-                                    {#if app.showAllAddons > 0 || (!addon.hideAddon || choice.isActive) && (addon.showAddon || checkRequirements(addon.requireds))}
-                                        <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} mainDiv={mainDiv} index={i} list={sAddons as SelectableAddon[]} />
-                                    {/if}
+                                    <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} mainDiv={mainDiv} index={i} list={sAddons as SelectableAddon[]} />
                                 {/each}
                             </div>
                         {/if}
@@ -279,7 +263,7 @@
     import ObjectRequired from './Object/ObjectRequired.svelte';
     import ObjectScore from './Object/ObjectScore.svelte';
 	import type { BgStyles, Choice, ChoiceOptions, Filters, Row, SelectableAddon } from '$lib/store/types';
-	import { app, choiceMap, getStyling, checkRequirements, sanitizeArg, replaceText, objectWidthToNum, snackbarVariables, winWidth, hexToRgba, selectObject, deselectObject, selectedOneMore, selectedOneLess, wordDialog, closestByClassPrefix } from '$lib/store/store.svelte';
+	import { app, choiceMap, getStyling, checkRequirements, sanitizeArg, replaceText, objectWidthToNum, snackbarVariables, winWidth, hexToRgba, selectObject, deselectObject, selectedOneMore, selectedOneLess, wordDialog, closestByClassPrefix, fixedWidth } from '$lib/store/store.svelte';
     import { tooltip } from '$lib/custom/tooltip/store.svelte';
 
     export { activateObject, options };
@@ -294,7 +278,8 @@
         const result = [];
         for (let i = 0; i < list.length; i++) {
             const addon = list[i];
-            if (addon.isSelectable !== true) result.push(addon);
+            const isEnabled = checkRequirements(addon.requireds);
+            if (addon.isSelectable !== true && (!row.unmetAddonRemoved || isEnabled) && (app.showAllAddons > 0 || (!addon.hideAddon || choice.isActive) && (addon.showAddon || isEnabled))) result.push(addon);
         }
         return result.length === 0 ? null : result;
     });
@@ -305,7 +290,7 @@
         const result = [];
         for (let i = 0; i < list.length; i++) {
             const addon = list[i];
-            if (addon.isSelectable === true && (app.showAllAddons > 0 || !addon.hideAddon || choice.isActive && (addon.showAddon || checkRequirements(addon.requireds)))) result.push(addon);
+            if (addon.isSelectable === true && (!row.unselAddonRemoved || addon.isActive) && (app.showAllAddons > 0 || (!addon.hideAddon || choice.isActive) && (addon.showAddon || checkRequirements(addon.requireds)))) result.push(addon);
         }
         return result.length === 0 ? null : result;
     });
@@ -314,7 +299,7 @@
         if (nAddons) {
             for (let i = 0; i < nAddons.length; i++) {
                 const addon = nAddons[i];
-                if (app.showAllAddons > 0 || !addon.skipIndex && (!addon.hideAddon || choice.isActive) && (addon.showAddon || checkRequirements(addon.requireds))) {
+                if (!addon.skipIndex) {
                     return i;
                 }
             }
@@ -383,10 +368,8 @@
     let choiceTextKey = $derived(replaceText(choice.text));
 
     let multiChoiceCounter = $derived.by(() => {
-        if (choice.hideMultipleCounter) {
-            return isEnabled;
-        }
-
+        if (choice.showMulInAddon) return false;
+        if (choice.hideMultipleCounter) return isEnabled;
         return true;
     });
 
@@ -627,12 +610,13 @@
 
     function objectWidthClass() {
         if (isSearch) return 'col-sm-6 col-12';
-        let objectWidth = (choice.objectWidth || row.objectWidth);
-        let objectWidthNum = objectWidthToNum(objectWidth);
-        let objectsPerRowNum = app.objectsPerRow === 'col-6' ? 2 : app.objectsPerRow === 'col-4' ? 3 : 4;
+        const objectWidth = row.overrideWidth ? row.objectWidth : (choice.objectWidth || row.objectWidth);
+        const objectWidthNum = objectWidthToNum(objectWidth);
+        const objectsPerRowNum = app.objectsPerRow === 'col-6' ? 2 : app.objectsPerRow === 'col-4' ? 3 : 4;
         if ($winWidth > 1280) {
             return objectWidth;
-        } else if ($winWidth > 720) {
+        } else if ($winWidth > app.smallerScreenPx) {
+            if (app.objectsPerRow === 'default') return fixedWidth(objectWidth);
             switch(objectWidthNum) {
                 case 1: return 'col-12';
                 case 2: return 'col-6';

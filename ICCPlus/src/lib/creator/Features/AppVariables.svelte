@@ -67,7 +67,7 @@
                         {/each}
                         {#if vRow.index === variableRows.length - 1}
                             <div class="col-xl-4 col-12">
-                                <button type="button" class="create-box col-12" style="min-height: 210px; font-size: 40px;" onclickcapture={createNewVariable} aria-label="Create New Word">
+                                <button type="button" class="create-box col-12" style="min-height: 210px; font-size: 40px;" onclickcapture={createNewVariable} aria-label="Create New Variable">
                                     <i class="mdi mdi-plus-thick"></i>
                                 </button>
                             </div>
@@ -101,7 +101,7 @@
     import Select, { Option } from '$lib/custom/select';
     import Textfield from '$lib/custom/textfield/Textfield.svelte';
     import { Wrapper } from '$lib/custom/tooltip';
-    import { app, checkDupId, variableMap, generateVariableId, scrollToLastRow, categoryMap } from '$lib/store/store.svelte';
+    import { app, checkDupId, variableMap, generateId, scrollToLastRow, categoryMap } from '$lib/store/store.svelte';
     import type { Category, Variable } from '$lib/store/types';
     import { createVirtualizer } from '@tanstack/svelte-virtual';
     import { onMount } from 'svelte';
@@ -169,7 +169,7 @@
     }
 
     function createNewVariable() {
-        let id = generateVariableId(0, 4);
+        let id = generateId(0, 4, 'variable');
         app.variables.push({id: id, isTrue: false, category: cIdx});
         variableMap.set(id, app.variables[app.variables.length - 1]);
 

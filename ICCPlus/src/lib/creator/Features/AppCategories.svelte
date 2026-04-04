@@ -1,18 +1,18 @@
 <Dialog
     bind:open
     surface$style="width: 960px; max-width: calc(100vw - 32px);"
-    onSMUIDialogClosed={onclose}
+    onSMUIDialogClosed={beforeClosed}
     id="dialog"
 >
         <Title class="text-left dialog-title" tabindex={0} autofocus>
-            {typeString[type]} Categories
+            {type === 'designGroup' ? isRowGroup ? 'Row ' : 'Choice ' : ''}{typeString[type]} Categories
         </Title>
         <Content class="pt-3">
             {#if type === 'designGroup'}
                 <div class="d-row align-items-center justify-end">
-                    <IconButton onclickcapture={() => isRowGroup = !isRowGroup}><i class="mdi mdi-menu-left"></i></IconButton>
+                    <IconButton onclickcapture={switchDesign}><i class="mdi mdi-menu-left"></i></IconButton>
                     <span class="list-text px-2">{isRowGroup ? 'Row' : 'Choice'} Design Groups</span>
-                    <IconButton onclickcapture={() => isRowGroup = !isRowGroup}><i class="mdi mdi-menu-right"></i></IconButton>
+                    <IconButton onclickcapture={switchDesign}><i class="mdi mdi-menu-right"></i></IconButton>
                 </div>
             {/if}
             <div class="container-fluid pb-2 mb-2">
@@ -95,7 +95,7 @@
     import DlgCommon from '$lib/creator/DlgCommon.svelte';
     import IconButton from '@smui/icon-button';
     import { Wrapper } from '$lib/custom/tooltip';
-	import { app, categoryMap } from '$lib/store/store.svelte';
+	import { app, categoryMap, lastPages } from '$lib/store/store.svelte';
     import AppPoints from './AppPoints.svelte';
     import AppVariables from './AppVariables.svelte';
     import AppGroups from './AppGroups.svelte';
@@ -103,6 +103,7 @@
     import AppDesignGroups from './AppDesignGroups.svelte';
     import AppGlobalRequirements from './AppGlobalRequirements.svelte';
     import type { Category } from '$lib/store/types';
+    import { onMount } from 'svelte';
 
     let { open, onclose, type }: { open: boolean; onclose: () => void; type: string } = $props();
 
@@ -167,6 +168,28 @@
             }
         }
     });
+
+    onMount(() => {
+        isRowGroup = lastPages.isRow;
+        currentPage = lastPages[dType];
+    });
+
+    function beforeClosed() {
+        if (type === 'designGroup') lastPages.isRow = isRowGroup;
+        lastPages[dType] = currentPage;
+        onclose();
+    }
+
+    function switchDesign() {
+        if (isRowGroup) {
+            lastPages.rDesign = currentPage;
+            currentPage = lastPages.cDesign;
+        } else {
+            lastPages.cDesign = currentPage;
+            currentPage = lastPages.rDesign;
+        }
+        isRowGroup = !isRowGroup;
+    }
 
     function createNewCategory(idx: number) {
         const slot = catSlots[idx];

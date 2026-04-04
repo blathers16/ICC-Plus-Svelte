@@ -173,7 +173,7 @@
     import Switch from '@smui/switch';
     import Textfield from '$lib/custom/textfield';
     import { Wrapper } from '$lib/custom/tooltip';
-    import { app, appVersion, backpackStyling, choiceMap, generateObjectId, getTimestamp, initStyling, objectWidths, pointBarStyling, rowMap, getGroups, getRows, getBackpackRows, generateScoreId, scoreSet, StylingSchema, snackbarVariables, getRowLabel, groupMap, objectDesignMap, filterStyling, textStyling, objectImageStyling, rowImageStyling, addonImageStyling, backgroundStyling, objectStyling, rowStyling, addonStyling, multiChoiceStyling, deleteDiscount } from '$lib/store/store.svelte';
+    import { app, appVersion, backpackStyling, choiceMap, generateId, getTimestamp, initStyling, objectWidths, pointBarStyling, rowMap, getGroups, getRows, getBackpackRows, scoreSet, StylingSchema, snackbarVariables, getRowLabel, groupMap, objectDesignMap, filterStyling, textStyling, objectImageStyling, rowImageStyling, addonImageStyling, backgroundStyling, objectStyling, rowStyling, addonStyling, multiChoiceStyling, deleteDiscount } from '$lib/store/store.svelte';
     import type { Row, Styling } from '$lib/store/types';
     
     let { open, onclose, row }: { open: boolean; onclose: () => void; row: Row } = $props();
@@ -402,7 +402,7 @@
                 for (let i = 0; i < row.objects.length; i++) {
                     const clone = JSON.parse(JSON.stringify(row.objects[i]));
 
-                    clone.id = generateObjectId(0, app.objectIdLength);
+                    clone.id = generateId(0, app.objectIdLength, 'choice');
                     clone.index = nRow.objects.length;
                     clone.isActive = false;
                     delete clone.forcedActivated;
@@ -411,7 +411,7 @@
                     for (let j = 0; j < clone.scores.length; j++) {
                         const score = clone.scores[j];
 
-                        score.idx = generateScoreId(0, 5);
+                        score.idx = generateId(0, 5, 's');
                         scoreSet.add(score.idx);
                         delete score.isActive;
                         delete score.setValue;

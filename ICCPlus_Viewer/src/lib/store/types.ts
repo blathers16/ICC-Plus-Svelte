@@ -604,7 +604,7 @@ export type ChoiceFunc = {
     isNotSearchable?: boolean,
     isAutoActive?: boolean,
 };
-export type Addon = {
+export type BaseAddon = {
     [key: string]: any;
     id: string,
     title: string,
@@ -622,14 +622,20 @@ export type Addon = {
         data: number
     }[],
     addonWidth?: string,
-    isSelectable?: boolean
 };
+export type NonSelectableAddon = {
+    isSelectable?: false | undefined;
+} & BaseAddon
 export type SelectableAddon = {
+    isSelectable: true,
     scores: Score[],
+    groups: string[],
     multipleUseVariable: number,
     isActive: boolean,
     deselectParent?: boolean,
-} & Addon & ChoiceFunc;
+    countAsChoice?: boolean,
+} & BaseAddon & ChoiceFunc;
+export type Addon = NonSelectableAddon | SelectableAddon;
 export type MDObject = {
     [key: string]: any,
     id: string,
@@ -888,6 +894,33 @@ export type DefaultSettings = {
     defaultUseHideValue: boolean,
     defaultUseShowReq: boolean
 }
+export type ViewerConfig = {
+    title: string,
+    favicon: string,
+    loadingType: string,
+    loadingBgColor: string,
+    loadingBgImage: string,
+    loadingCircleColor: string,
+    loadingTrackColor: string,
+    loadingText: string,
+    loadingTextColor: string,
+    loadingTextFont: string,
+    loadingTextShadow: string,
+    useSeparateImages: boolean,
+    useLocalViewer: boolean
+}
+export type SoundEffect = {
+    id: string,
+    name: string,
+    audio: string,
+    volume: number,
+    pitch: number,
+    isDefault: boolean,
+    onSelected: boolean,
+    onDeselected: boolean,
+    requireds: Requireds[],
+    groups: string[]
+}
 export type App = {
     [key: string]: any,
     version?: string,
@@ -909,14 +942,16 @@ export type App = {
     tmpScore: Score[],
     tmpAddon: Addon[],
     tmpGroup: string[],
+    tmpDesignGroup: string[],
     rowIdLength: number,
     objectIdLength: number,
     words: Word[],
     groups: Group[],
     rowDesignGroups?: RowDesignGroup[],
-    objectDesignGroups?: ObjectDesignGroup[],
+    objectDesignGroups: ObjectDesignGroup[],
     objectsPerRow: string,
     globalRequirements?: GlobalRequirement[],
+    soundEffects: SoundEffect[],
     googleFonts: string[],
     customFonts: string[],
     compressImageAuto: boolean,
@@ -975,7 +1010,10 @@ export type App = {
     styling: Styling,
     categories: Category[],
     cropperPosition: number,
-    enableSearch: boolean
+    enableSearch: boolean,
+    useDesignGroupBtn: boolean,
+    smallerScreenPx: number,
+    viewerConfig: ViewerConfig
 } & DefaultSettings;
 export type RowMap = {
     rows: number,
@@ -1146,3 +1184,6 @@ export type BgStyles = {
     filter?: string,
     cursor?: string,
 };
+export type LastPages = {
+    vSave: number
+}

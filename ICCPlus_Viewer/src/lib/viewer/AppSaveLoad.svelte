@@ -1,7 +1,7 @@
 <Dialog
     bind:open
     surface$style="width: 700px; max-width: calc(100vw - 32px);"
-    onSMUIDialogClosed={onclose}
+    onSMUIDialogClosed={beforeClosed}
     id="dialog"
 >
         <Title class="text-left dialog-title" tabindex={0} autofocus>
@@ -129,7 +129,8 @@
     import Switch from '@smui/switch';
     import Textfield from '$lib/custom/textfield';
     import AppBuildForm from './AppBuildForm.svelte';
-	import { buildAutoSaveSlot, buildSaveSlots, saveToSlot, deleteSlot, getSelectedObjectId, loadActivated, oldSaveSlots, snackbarVariables, loadFromSlot } from '$lib/store/store.svelte';
+	import { buildAutoSaveSlot, buildSaveSlots, saveToSlot, deleteSlot, getSelectedObjectId, loadActivated, oldSaveSlots, snackbarVariables, loadFromSlot, lastPages } from '$lib/store/store.svelte';
+    import { onMount } from 'svelte';
 
     let { open, onclose }: { open: boolean; onclose: () => void } = $props();
 
@@ -149,6 +150,15 @@
     let legacySlots = $derived(Array.from({ length: pageEnd - pageStart + 1}, (_, i) => oldSaveSlots[pageStart + i]));
     let isLegacy = $state(false);
     let pageNum = $derived((currentPage - 1) * 9);
+
+    onMount(() => {
+        currentPage = lastPages.vSave;
+    });
+
+    function beforeClosed() {
+        lastPages.vSave = currentPage;
+        onclose();
+    }
 
     async function loadApp(index: number) {
         const key = `${location.pathname.replace(/\/index\.html$/, '/')}slot-${index}`;

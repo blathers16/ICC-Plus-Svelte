@@ -10,21 +10,12 @@
     <Content>
         <div class="row p-2">
             {#each featureMenuComponent as _undefined, i}
-                {#if i === 10}
-                    <div class="col-12 d-column justify-space-between pt-3">
-                        <p class="mb-3">{featureMenuComponent[i].text}</p>
-                        <Button onclickcapture={featureMenuComponent[i].action} variant="raised" >
-                            <Label>{featureMenuComponent[i].name}</Label>
-                        </Button>
-                    </div>
-                {:else}
-                    <div class="col-sm-6 col-12 d-column justify-space-between py-2">
-                        <p class="mb-3">{featureMenuComponent[i].text}</p>
-                        <Button onclickcapture={featureMenuComponent[i].action} variant="raised" >
-                            <Label>{featureMenuComponent[i].name}</Label>
-                        </Button>
-                    </div>
-                {/if}
+                <div class="col-sm-6 col-12 d-column justify-space-between py-2">
+                    <p class="mb-3">{featureMenuComponent[i].text}</p>
+                    <Button onclickcapture={featureMenuComponent[i].action} variant="raised" >
+                        <Label>{featureMenuComponent[i].name}</Label>
+                    </Button>
+                </div>
             {/each}
         </div>
     </Content>
@@ -56,21 +47,18 @@
     <AppCategories open={currentDialog === 'appDesignGroups'} onclose={() => (currentDialog = 'none')} type='designGroup' />
 {:else if currentDialog === 'appGlobalRequirements'}
     <AppCategories open={currentDialog === 'appGlobalRequirements'} onclose={() => (currentDialog = 'none')} type='globalReq' />
+{:else if currentDialog === 'appSoundEffects'}
+    <AppSoundEffects open={currentDialog === 'appSoundEffects'} onclose={() => (currentDialog = 'none')} />
 {/if}
 
 <script lang="ts">
     import AppCategories from './Features/AppCategories.svelte';
-    import AppPoints from './Features/AppPoints.svelte';
-    import AppVariables from './Features/AppVariables.svelte';
-    import AppGroups from './Features/AppGroups.svelte';
     import AppBackpack from './Features/AppBackpack.svelte';
     import AppTemplates from './Features/AppTemplates.svelte';
     import AppDefaults from './Features/AppDefaults.svelte';
     import AppSymbols from './Features/AppSymbols.svelte';
-    import AppWords from './Features/AppWords.svelte';
+    import AppSoundEffects from './Features/AppSoundEffects.svelte';
     import AppIdSearch from './Features/AppIdSearch.svelte';
-    import AppDesignGroups from './Features/AppDesignGroups.svelte';
-    import AppGlobalRequirements from './Features/AppGlobalRequirements.svelte';
     import Dialog, { Title, Content, Actions } from '@smui/dialog';
     import Button, { Label } from '@smui/button';
 
@@ -119,7 +107,11 @@
         action: () => { currentDialog = 'appGlobalRequirements' },
         name: 'Manage Global Requirements',
         text: 'In Global Requirements, You can define requirements that are common to multiple choices.'
+    }, {
+        action: () => { currentDialog = 'appSoundEffects' },
+        name: 'Manage Sound Effects',
+        text: 'You can set short sound effects. Keep each file under 100 KB to avoid performance issues.'
     }];
-    let currentDialog = $state<'none' | 'appPoints' | 'appVariables' | 'appGroups' | 'appBackpack' | 'appTemplates' | 'appDefaults' | 'appSymbols' | 'appWords' | 'appIdSearch' | 'appDesignGroups' | 'appGlobalRequirements'>('none');
+    let currentDialog = $state<'none' | 'appPoints' | 'appVariables' | 'appGroups' | 'appBackpack' | 'appTemplates' | 'appDefaults' | 'appSymbols' | 'appWords' | 'appIdSearch' | 'appDesignGroups' | 'appGlobalRequirements' | 'appSoundEffects'>('none');
 
 </script>

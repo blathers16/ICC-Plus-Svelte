@@ -224,6 +224,47 @@
     }];
     const changelogList = [{
         open: true,
+        title: `v2.9.0 / ${getDate('2026-04-04T14:00:00Z')}`,
+        text: `<span style="color: green">Row</span>
+        - Added option to hide unselected addons under hide the contents of choices.
+        - Added option to hide unmet addons under hide the contents of choices.
+        - Added option to override choices per row of choices when using group choices or selected choices options.
+
+        <span style="color: green">Choice</span>
+        - Added option to show multiple counter in first visible addon.
+        - Fixed issue where choices were not selected correctly when using random selection with Choice with selection delay option.
+        - Fixed issue where points were not calculated correctly when applying discounts to multiple selectable choices.
+        - Fixed issue where variable could not be used as requirement.
+        - Fixed issue where score using expression was not recalculated.
+
+        <span style="color: green">Addon</span>
+        - Added option to count as selected choice in the row.
+        - Fixed issue where move button in requirement didn't work properly.
+        
+        <span style="color: green">Group</span>
+        - Fixed issue where selectable addon could not be added to group.
+
+        <span style="color: green">Design Group</span>
+        - Fixed issue where design was not applied correctly when assigning group to design group.
+
+        <span style="color: green">Sound Effect</span>
+        - Added feature to upload short audio files for use as sound effects.
+
+        <span style="color: green">Save / Load</span>
+        - Added feature to export project with viewer.
+        - Added option to customize loading screen.
+        - Added option to set favicon.
+
+        <span style="color: green">Global Settings</span>
+        - Added option to prevent choices per row from decreasing on smaller screens in display tab.
+        - Added option to configure screen width at which choices per row is applied in display tab.
+
+        <span style="color: green">Miscellaneous</span>
+        - Fixed issue where internal IDs used in choice remained as previous IDs when choice ID changed via Import feature in context menu.
+        - Fixed issue where .ico files were not properly recognized.
+        `
+    }, {
+        open: false,
         title: `v2.8.10 / ${getDate('2026-03-02T03:00:00Z')}`,
         text: `<span style="color: green">Choice</span>
         - Fixed issue where choice with player custom image could not be deselected.

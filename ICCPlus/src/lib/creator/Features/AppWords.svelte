@@ -102,7 +102,7 @@
     import Select, { Option } from '$lib/custom/select';
     import Textfield from '$lib/custom/textfield/Textfield.svelte';
     import { Wrapper } from '$lib/custom/tooltip';
-    import { app, checkDupId, wordMap, generateWordId, scrollToLastRow, categoryMap } from '$lib/store/store.svelte';
+    import { app, checkDupId, wordMap, generateId, scrollToLastRow, categoryMap } from '$lib/store/store.svelte';
     import type { Category, Word } from '$lib/store/types';
     import { createVirtualizer } from '@tanstack/svelte-virtual';
     import { onMount } from 'svelte';
@@ -169,7 +169,7 @@
     }
 
     function createNewWord() {
-        let id = generateWordId(0, 4);
+        let id = generateId(0, 4, 'word');
         app.words.push({id: id, replaceText: '', category: cIdx});
         wordMap.set(id, app.words[app.words.length - 1]);
 

@@ -80,6 +80,14 @@
                                 <IconButton disabled={choice.isActive && choiceButton.icon !== 'mdi mdi-comment-plus'} onclickcapture={choiceButton.action} oncontextmenu={choiceButton.contextAction}><i class={choiceButton.icon}></i></IconButton>
                             </Wrapper>
                         {/each}
+                        {#if app.useDesignGroupBtn}
+                            <Wrapper text="L: Add to Design Group<br>R: Context Menu">
+                                <IconButton disabled={choice.isActive} onclickcapture={() => { 
+                                    if (typeof choice.objectDesignGroups === 'undefined') choice.objectDesignGroups = [];
+                                    choice.objectDesignGroups.push('');
+                                }} oncontextmenu={(e: MouseEvent) => { dGroupContext(e)}}><i class="mdi mdi-pencil"></i></IconButton>
+                            </Wrapper>
+                        {/if}
                     </div>
                     <Accordion>
                     {#if choice.scores.length > 0}
@@ -104,7 +112,7 @@
                         </Panel>
                     {/if}
                     {#if choice.addons.length > 0}
-                        <Panel class="bordered-panel {panelAddon ? 'on-top' : ''}" bind:open={panelAddon} variant="unelevated" conditionalRender={true}>
+                        <Panel class="bordered-panel{panelAddon ? ' on-top' : ''}" bind:open={panelAddon} variant="unelevated" conditionalRender={true}>
                             <Header class="p-0">
                                 Addons: {choice.addons.length}
                             </Header>
@@ -144,7 +152,7 @@
                         </Panel>
                     {/if}
                     {#if choice.requireds.length > 0}
-                        <Panel class="bordered-panel {panelReq ? 'on-top' : ''}" bind:open={panelReq} variant="unelevated" conditionalRender={true}>
+                        <Panel class="bordered-panel{panelReq ? ' on-top' : ''}" bind:open={panelReq} variant="unelevated" conditionalRender={true}>
                             <Header class="p-0">
                                 Requirements: {choice.requireds.length}
                             </Header>
@@ -152,7 +160,7 @@
                                 {#if panelReq}
                                 <div class="row">
                                     {#each choice.requireds as req, i}
-                                        <div class="{req.requireds.length > 0 || req.type === 'or' ? 'col-12' : reqCol} p-2">
+                                        <div class="{(req.requireds && req.requireds.length > 0) || req.type === 'or' ? 'col-12' : reqCol} p-2">
                                             <ObjectRequired required={req} isEditModeOn={true} data={choice} index={i} />
                                             <Button onclickcapture={() => choice.requireds.splice(i, 1)} class="w-100 mt-1" variant="raised" disabled={choice.isActive}>
                                                 <Label>Delete</Label>
@@ -165,7 +173,7 @@
                         </Panel>
                     {/if}
                     {#if choice.groups.length > 0}
-                        <Panel class="bordered-panel {panelGroup ? 'on-top' : ''}" bind:open={panelGroup} variant="unelevated" conditionalRender={true}>
+                        <Panel class="bordered-panel{panelGroup ? ' on-top' : ''}" bind:open={panelGroup} variant="unelevated" conditionalRender={true}>
                             <Header class="p-0">
                                 Groups: {choice.groups.length}
                             </Header>
@@ -176,6 +184,27 @@
                                         <div class="col-12 p-0 pb-2">
                                             <ObjectGroup choice={choice} index={i} />
                                             <Button onclickcapture={() => deleteGroup(i)} class="w-100 mt-1" variant="raised" disabled={choice.isActive}>
+                                                <Label>Delete</Label>
+                                            </Button>
+                                        </div>
+                                    {/each}
+                                </div>
+                                {/if}
+                            </AcdContent>
+                        </Panel>
+                    {/if}
+                    {#if app.useDesignGroupBtn && choice.objectDesignGroups && choice.objectDesignGroups.length > 0}
+                        <Panel class="bordered-panel{panelDGroup ? ' on-top' : ''}" bind:open={panelDGroup} variant="unelevated" conditionalRender={true}>
+                            <Header class="p-0">
+                                Design Groups: {choice.objectDesignGroups.length}
+                            </Header>
+                            <AcdContent style="overflow:visible">
+                                {#if panelDGroup}
+                                <div class="row">
+                                    {#each choice.objectDesignGroups, i}
+                                        <div class="col-12 p-0 pb-2">
+                                            <ObjectDesignGroup choice={choice} index={i} />
+                                            <Button onclickcapture={() => deleteDesignGroup(i)} class="w-100 mt-1" variant="raised">
                                                 <Label>Delete</Label>
                                             </Button>
                                         </div>
@@ -224,6 +253,7 @@
                                                         delete choice.allowSelectByClick;
                                                         delete choice.useSlider;
                                                         delete choice.hideCounter;
+                                                        delete choice.showMulInAddon;
                                                         if (typeof choice.scores !== 'undefined') {
                                                             for (let i = 0; i < choice.scores.length; i++) {
                                                                 const score = choice.scores[i];
@@ -427,11 +457,23 @@
                                                     Show Requirements in First Visible Addon
                                                 {/snippet}
                                             </FormField>
+                                            {#if choice.isSelectableMultiple}
+                                                <FormField class="col-12 m-1 p-0">
+                                                    <Checkbox bind:checked={() => choice.showMulInAddon ?? false, (e) => choice.showMulInAddon = e} onchange={() => {
+                                                        if (!choice.showMulInAddon) {
+                                                            delete choice.showMulInAddon;
+                                                        }
+                                                    }} />
+                                                    {#snippet label()}
+                                                        Show Counter in First Visible Addon
+                                                    {/snippet}
+                                                </FormField>
+                                            {/if}
                                         </div>
                                         {/if}
                                     </AcdContent>
                                 </Panel>
-                                <Panel class="bordered-panel {panel02 ? 'on-top' : ''}" bind:open={panel02} variant="unelevated" conditionalRender={true}>
+                                <Panel class="bordered-panel{panel02 ? ' on-top' : ''}" bind:open={panel02} variant="unelevated" conditionalRender={true}>
                                     <Header class="p-0">
                                         - Other Choices
                                         {#snippet icon()}
@@ -930,7 +972,7 @@
                                         {/if}
                                     </AcdContent>
                                 </Panel>
-                                <Panel class="bordered-panel {panel03 ? 'on-top' : ''}" bind:open={panel03} variant="unelevated" conditionalRender={true}>
+                                <Panel class="bordered-panel{panel03 ? ' on-top' : ''}" bind:open={panel03} variant="unelevated" conditionalRender={true}>
                                     <Header class="p-0">
                                         - Effects
                                         {#snippet icon()}
@@ -1206,6 +1248,52 @@
                                                 {/snippet}
                                             </FormField>
                                             <FormField class="col-12 m-1 p-0">
+                                                <Checkbox bind:checked={() => choice.useSfx ?? false, (e) => choice.useSfx = e} onchange={() => {
+                                                    if (!choice.useSfx) {
+                                                        delete choice.useSfx;
+                                                        delete choice.sfxId;
+                                                        delete choice.sfxOnSelect;
+                                                        delete choice.sfxOnDeselect;
+                                                    }
+                                                }} />
+                                                {#snippet label()}
+                                                    Enable Sound Effect
+                                                {/snippet}
+                                            </FormField>
+                                            {#if choice.useSfx}
+                                                <FormField class="col-12 m-1 p-0">
+                                                    <Checkbox bind:checked={() => choice.sfxOnSelect ?? false, (e) => choice.sfxOnSelect = e} onchange={() => {
+                                                        if (!choice.sfxOnSelect) {
+                                                            delete choice.sfxOnSelect;
+                                                        }
+                                                    }} />
+                                                    {#snippet label()}
+                                                        Play on Choice Selected
+                                                    {/snippet}
+                                                </FormField>
+                                                <FormField class="col-12 m-1 p-0">
+                                                    <Checkbox bind:checked={() => choice.sfxOnDeselect ?? false, (e) => choice.sfxOnDeselect = e} onchange={() => {
+                                                        if (!choice.sfxOnDeselect) {
+                                                            delete choice.sfxOnDeselect;
+                                                        }
+                                                    }} />
+                                                    {#snippet label()}
+                                                        Play on Choice Deselected
+                                                    {/snippet}
+                                                </FormField>
+                                                <Autocomplete
+                                                    options={getSoundEffects()}
+                                                    getOptionLabel={getSfxLabel}
+                                                    bind:value={choice.sfxId}
+                                                    label="Sound Effect"
+                                                    toggle={true}
+                                                    showMenuWithNoInput={true}
+                                                    textfield$variant="filled"
+                                                    class="w-100 p-0"
+                                                />
+                                                <div class="b-line"></div>
+                                            {/if}
+                                            <FormField class="col-12 m-1 p-0">
                                                 <Checkbox bind:checked={() => choice.isFadeTransition ?? false, (e) => choice.isFadeTransition = e} onchange={() => {
                                                     if (choice.isFadeTransition) {
                                                         choice.fadeTransitionColor = '#000000FF';
@@ -1237,7 +1325,7 @@
                                         {/if}
                                     </AcdContent>
                                 </Panel>
-                                <Panel class="bordered-panel {panel04 ? 'on-top' : ''}" bind:open={panel04} variant="unelevated" conditionalRender={true}>
+                                <Panel class="bordered-panel{panel04 ? ' on-top' : ''}" bind:open={panel04} variant="unelevated" conditionalRender={true}>
                                     <Header class="p-0">
                                         - Miscellaneous
                                         {#snippet icon()}
@@ -1481,10 +1569,10 @@
             {/if}
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <!-- svelte-ignore a11y_no_static_element_interactions -->
-            <div class="row row-{row.id} choice-{choice.id} {isActive ? 'choice-selected' : 'choice-unselected'} {isEnabled ? 'choice-enabled' : 'choice-disabled'} {(isActive && filterStyle.selOverlayOnImage) || (!isEnabled && filterStyle.reqOverlayOnImage) ? 'bg-overlay ' : ''}w-100" style={objectBackground} onclickcapture={(e) => activateObject(choice, row, e, true)} oncontextmenu={() => console.log(choice)}>
+            <div class="row row-{row.id} choice-{choice.id} {isActive ? 'choice-selected' : 'choice-unselected'} {isEnabled ? 'choice-enabled' : 'choice-disabled'} {(isActive && filterStyle.selOverlayOnImage) || (!isEnabled && filterStyle.reqOverlayOnImage) ? 'bg-overlay ' : ''}w-100" style={objectBackground} onclickcapture={(e) => activateObject(choice, row, e, true)}>
                 {#if choice.template >= 4 || choice.template === 1 || windowWidth <= 1280 || row.choicesShareTemplate}
                     <div class="d-column w-100 p-0 align-items-center" style={sAddons ? objectFilter : undefined}>
-                        {#if row.resultShowRowTitle}
+                        {#if row.resultShowRowTitle || isSearch}
                             {#key oriTitleKey}
                                 <div class="col-12" style={scoreText}>
                                     {@html DOMPurify.sanitize(oriTitleKey, sanitizeArg)}
@@ -1540,7 +1628,7 @@
                                 {/key}
                             {/if}
                             {#if choice.isSelectableMultiple && multiChoiceCounter && multiChoiceStyle.multiChoiceCounterPosition === 3}
-                                <ObjectMultiChoice isEnabled={isEnabled && !row.isInfoRow && !choice.isNotSelectable} row={row} choice={choice}  selectedOneMore={() => selectedOneMore(choice, row, options)} selectedOneLess={() => selectedOneLess(choice, row, options)} />
+                                <ObjectMultiChoice isEnabled={isEnabled && !row.isInfoRow && !choice.isNotSelectable} row={row} choice={choice} selectedOneMore={() => selectedOneMore(choice, row, options)} selectedOneLess={() => selectedOneLess(choice, row, options)} />
                             {/if}
                             {#if choice.template === 4 && windowWidth > 1280 && choice.image && !row.objectImageRemoved}
                                 {#if choice.imageSourceTooltip}
@@ -1553,9 +1641,7 @@
                         {#if nAddons}
                             <div class="row g-0 p-0 w-100{addonJustify}">
                                 {#each nAddons as addon, i}
-                                    {#if app.showAllAddons > 0 || (!addon.hideAddon || choice.isActive) && (addon.showAddon || checkRequirements(addon.requireds))}
-                                        <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} bCreatorMode={bCreatorMode} mainDiv={mainDiv} />
-                                    {/if}
+                                    <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} bCreatorMode={bCreatorMode} mainDiv={mainDiv} />
                                 {/each}
                             </div>
                         {/if}
@@ -1566,15 +1652,13 @@
                     {#if sAddons}
                         <div class="row g-0 p-0 w-100{addonJustify}">
                             {#each sAddons as addon, i}
-                                {#if app.showAllAddons > 0 || (!addon.hideAddon || choice.isActive) && (addon.showAddon || checkRequirements(addon.requireds))}
-                                    <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} bCreatorMode={bCreatorMode} mainDiv={mainDiv} index={i} list={sAddons as SelectableAddon[]} />
-                                {/if}
+                                <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} bCreatorMode={bCreatorMode} mainDiv={mainDiv} index={i} list={sAddons as SelectableAddon[]} />
                             {/each}
                         </div>
                     {/if}
                 {:else}
                     {#if choice.template === 2}
-                        <div class="row g-0" style={objectFilter}>
+                        <div class="row g-0" style={sAddons ? objectFilter : undefined}>
                             <div class="col p-0 text-center" style="max-width: {choiceImageBoxWidth}%">
                                 {#if choice.image && !row.objectImageRemoved}
                                     {#if choice.imageSourceTooltip}
@@ -1621,9 +1705,7 @@
                                     {#if nAddons}
                                         <div class="row g-0 p-0 col w-100{addonJustify}">
                                             {#each nAddons as addon, i}
-                                                {#if app.showAllAddons > 0 || (!addon.hideAddon || choice.isActive) && (addon.showAddon || checkRequirements(addon.requireds))}
-                                                    <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} bCreatorMode={bCreatorMode} mainDiv={mainDiv} />
-                                                {/if}
+                                                <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} bCreatorMode={bCreatorMode} mainDiv={mainDiv} />
                                             {/each}
                                         </div>
                                     {/if}
@@ -1637,9 +1719,7 @@
                                     {#if nAddons}
                                         <div class="row g-0 p-0 col w-100{addonJustify}">
                                             {#each nAddons as addon, i}
-                                                {#if app.showAllAddons > 0 || (!addon.hideAddon || choice.isActive) && (addon.showAddon || checkRequirements(addon.requireds))}
-                                                    <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} bCreatorMode={bCreatorMode} mainDiv={mainDiv} />
-                                                {/if}
+                                                <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} bCreatorMode={bCreatorMode} mainDiv={mainDiv} />
                                             {/each}
                                         </div>
                                     {/if}
@@ -1652,14 +1732,12 @@
                         {#if sAddons}
                             <div class="row g-0 p-0 col w-100{addonJustify}">
                                 {#each sAddons as addon, i}
-                                    {#if app.showAllAddons > 0 || (!addon.hideAddon || choice.isActive) && (addon.showAddon || checkRequirements(addon.requireds))}
-                                        <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} bCreatorMode={bCreatorMode} mainDiv={mainDiv} index={i} list={sAddons as SelectableAddon[]} />
-                                    {/if}
+                                    <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} bCreatorMode={bCreatorMode} mainDiv={mainDiv} index={i} list={sAddons as SelectableAddon[]} />
                                 {/each}
                             </div>
                         {/if}
                     {:else if choice.template === 3}
-                        <div class="row g-0" style={objectFilter}>
+                        <div class="row g-0" style={sAddons ? objectFilter : undefined}>
                             <div class="col p-0 text-center" style="max-width: {100 - choiceImageBoxWidth}%">
                                 {#if choice.title !== '' && !row.objectTitleRemoved}
                                     {#key choiceTitleKey}<h2 class="mb-0" style={objectTitle}>{@html DOMPurify.sanitize(choiceTitleKey, sanitizeArg)}</h2>{/key}
@@ -1697,9 +1775,7 @@
                                     {#if nAddons}
                                         <div class="row g-0 p-0 col w-100{addonJustify}">
                                             {#each nAddons as addon, i}
-                                                {#if app.showAllAddons > 0 || (!addon.hideAddon || choice.isActive) && (addon.showAddon || checkRequirements(addon.requireds))}
-                                                    <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} bCreatorMode={bCreatorMode} mainDiv={mainDiv} />
-                                                {/if}
+                                                <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} bCreatorMode={bCreatorMode} mainDiv={mainDiv} />
                                             {/each}
                                         </div>
                                     {/if}
@@ -1722,9 +1798,7 @@
                                     {#if nAddons}
                                         <div class="row g-0 p-0 col w-100{addonJustify}">
                                             {#each nAddons as addon, i}
-                                                {#if app.showAllAddons > 0 || (!addon.hideAddon || choice.isActive) && (addon.showAddon || checkRequirements(addon.requireds))}
-                                                    <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} bCreatorMode={bCreatorMode} mainDiv={mainDiv} />
-                                                {/if}
+                                                <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} bCreatorMode={bCreatorMode} mainDiv={mainDiv} />
                                             {/each}
                                         </div>
                                     {/if}
@@ -1737,9 +1811,7 @@
                         {#if sAddons}
                             <div class="row g-0 p-0 col w-100{addonJustify}">
                                 {#each sAddons as addon, i}
-                                    {#if app.showAllAddons > 0 || (!addon.hideAddon || choice.isActive) && (addon.showAddon || checkRequirements(addon.requireds))}
-                                        <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} bCreatorMode={bCreatorMode} mainDiv={mainDiv} index={i} list={sAddons as SelectableAddon[]} />
-                                    {/if}
+                                    <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} bCreatorMode={bCreatorMode} mainDiv={mainDiv} index={i} list={sAddons as SelectableAddon[]} />
                                 {/each}
                             </div>
                         {/if}
@@ -1762,6 +1834,7 @@
     import FormField from '@smui/form-field';
     import IconButton, { Icon } from '@smui/icon-button';
     import ObjectAddon from './Object/ObjectAddon.svelte';
+    import ObjectDesignGroup from './Object/ObjectDesignGroup.svelte';
     import ObjectGroup from './Object/ObjectGroup.svelte';
     import ObjectMultiChoice from './Object/ObjectMultiChoice.svelte';
     import ObjectRequired from './Object/ObjectRequired.svelte';
@@ -1771,7 +1844,7 @@
     import Tiptap from '$lib/store/Tiptap.svelte';
     import { Wrapper } from '$lib/custom/tooltip';
 	import type { BgStyles, Choice, ChoiceOptions, Filters, Row, SelectableAddon } from '$lib/store/types';
-	import { app, checkDupId, choiceMap, groupMap, getChoiceLabel, getRowLabel, getGroupLabel, getStyling, getPointTypeLabel, objectWidths, checkRequirements, sanitizeArg, replaceText, activatedMap, tmpActivatedMap, objectWidthToNum, generateObjectId, dlgVariables, snackbarVariables, getChoices, getGroups, getPointTypes, getRows, getVariables, getWords, objectDesignMap, winWidth, generateScoreId, scoreSet, getBackpackChoices, getBackpackRows, hexToRgba, menuVariables, removeAnchor, pasteObject, clearClipboard, deleteDiscount, exportData, selectObject, deselectObject, selectedOneMore, selectedOneLess, imgDialog, closestByClassPrefix, getSelectables, getBackpackSelectables } from '$lib/store/store.svelte';
+	import { app, checkDupId, choiceMap, groupMap, getChoiceLabel, getRowLabel, getGroupLabel, getStyling, getPointTypeLabel, objectWidths, checkRequirements, sanitizeArg, replaceText, activatedMap, tmpActivatedMap, objectWidthToNum, generateId, dlgVariables, snackbarVariables, getChoices, getGroups, getPointTypes, getRows, getVariables, getWords, objectDesignMap, winWidth, scoreSet, getBackpackChoices, getBackpackRows, hexToRgba, menuVariables, removeAnchor, pasteObject, clearClipboard, deleteDiscount, exportData, selectObject, deselectObject, selectedOneMore, selectedOneLess, imgDialog, closestByClassPrefix, getSelectables, getBackpackSelectables, fixedWidth, getSoundEffects, getSfxLabel } from '$lib/store/store.svelte';
     import { tick } from 'svelte';
     import { tooltip } from '$lib/custom/tooltip/store.svelte';
 
@@ -1853,8 +1926,8 @@
         text: '= Assignment',
         value: '5'
     }];
-    const hideContentText = ['Title of Choice', 'Image of Choice', 'Text of Choice', 'Score of Choice', 'Requirement of Choice', 'Title of Addon', 'Image of Addon', 'Text of Addon'];
-    const hideContentValue = ['1', '2', '3', '4', '5', '6', '7', '8'];
+    const hideContentText = ['Title of Choice', 'Image of Choice', 'Text of Choice', 'Score of Choice', 'Requirement of Choice', 'Title of Addon', 'Image of Addon', 'Text of Addon', 'Unselected Addon', 'Unmet Addon'];
+    const hideContentValue = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
     const variableTypes = [{
         text: 'True',
         value: '1'
@@ -1875,7 +1948,8 @@
         const result = [];
         for (let i = 0; i < list.length; i++) {
             const addon = list[i];
-            if (addon.isSelectable !== true) result.push(addon);
+            const isEnabled = checkRequirements(addon.requireds);
+            if (addon.isSelectable !== true && (!row.unmetAddonRemoved || isEnabled) && (app.showAllAddons > 0 || (!addon.hideAddon || choice.isActive) && (addon.showAddon || isEnabled))) result.push(addon);
         }
         return result.length === 0 ? null : result;
     });
@@ -1886,7 +1960,7 @@
         const result = [];
         for (let i = 0; i < list.length; i++) {
             const addon = list[i];
-            if (addon.isSelectable === true && (app.showAllAddons > 0 || !addon.hideAddon || choice.isActive && (addon.showAddon || checkRequirements(addon.requireds)))) result.push(addon);
+            if (addon.isSelectable === true && (!row.unselAddonRemoved || addon.isActive) && (app.showAllAddons > 0 || (!addon.hideAddon || choice.isActive) && (addon.showAddon || checkRequirements(addon.requireds)))) result.push(addon);
         }
         return result.length === 0 ? null : result;
     });
@@ -1895,6 +1969,7 @@
     let panelReq = $state(false);
     let panelAddon = $state(false);
     let panelGroup = $state(false);
+    let panelDGroup = $state(false);
     let panel01 = $state(false);
     let panel02 = $state(false);
     let panel03 = $state(false);
@@ -1904,7 +1979,7 @@
         if (nAddons) {
             for (let i = 0; i < nAddons.length; i++) {
                 const addon = nAddons[i];
-                if (app.showAllAddons > 0 || !addon.skipIndex && (!addon.hideAddon || choice.isActive) && (addon.showAddon || checkRequirements(addon.requireds))) {
+                if (!addon.skipIndex) {
                     return i;
                 }
             }
@@ -1984,10 +2059,8 @@
     let choiceTitleKey = $derived(replaceText(choice.title));
     let choiceTextKey = $derived(replaceText(choice.text));
     let multiChoiceCounter = $derived.by(() => {
-        if (choice.hideMultipleCounter) {
-            return isEnabled;
-        }
-
+        if (choice.showMulInAddon) return false;
+        if (choice.hideMultipleCounter) return isEnabled;
         return true;
     });
 
@@ -2174,7 +2247,7 @@
 
     function createNewScore() {
         choice.scores.push({
-            idx: generateScoreId(0, 5),
+            idx: generateId(0, 5, 's'),
             id: '',
             value: 0,
             type: '',
@@ -2210,7 +2283,7 @@
             for (var i = 0; i < app.tmpScore.length; i++) {
                 const tmpScore = JSON.parse(JSON.stringify(app.tmpScore[i]));
                 deleteDiscount(tmpScore);
-                tmpScore.idx = generateScoreId(0, 5);
+                tmpScore.idx = generateId(0, 5, 's');
                 choice.scores.push(tmpScore);
             }
         }
@@ -2244,13 +2317,13 @@
                     tmpAddon.isActive = false;
                     delete tmpAddon.forcedActivated;
                     delete tmpAddon.appliedDisChoices;
-                    tmpAddon.id = generateObjectId(0, 4, true);
+                    tmpAddon.id = generateId(0, app.objectIdLength, 'addon');
 
                     if (tmpAddon.scores) {
                         for (let j = 0; j < tmpAddon.scores.length; j++) {
                             const score = tmpAddon.scores[j];
 
-                            score.idx = generateScoreId(0, 5);
+                            score.idx = generateId(0, 5, 's');
                             scoreSet.add(score.idx);
                             if (tmpAddon.isSelectableMultiple) {
                                 delete score.isActiveMul;
@@ -2333,6 +2406,37 @@
         }
     }
 
+    function copyDesignGroups() {
+        if (choice.objectDesignGroups && choice.objectDesignGroups.length > 0) {
+            if (typeof app.tmpGroup === 'undefined') app.tmpGroup = [];
+            app.tmpGroup.length = 0;
+            for (let i = 0; i < choice.groups.length; i++) {
+                app.tmpGroup.push(choice.groups[i]);
+            }
+            snackbarVariables.labelText = 'Copied to clipboard.';
+            snackbarVariables.isOpen = true;
+        } else {
+            snackbarVariables.labelText = 'Nothing to copy.';
+            snackbarVariables.isOpen = true;
+        }
+    }
+
+    function pasteDesignGroup() {
+        if (typeof app.tmpGroup === 'undefined' || app.tmpGroup.length === 0) {
+            snackbarVariables.labelText = 'The clipboard is empty.';
+            snackbarVariables.isOpen = true;
+        } else {
+            for (var i = 0; i < app.tmpGroup.length; i++) {
+                let group = groupMap.get(app.tmpGroup[i]);
+                choice.groups.push(app.tmpGroup[i]);
+                if (typeof group !== 'undefined') {
+                    let elementIndex = group.elements.indexOf(choice.id);
+                    if (elementIndex === -1) group.elements.push(choice.id);
+                }
+            }
+        }
+    }
+
     function choiceContext(e: MouseEvent) {
         const target = e.currentTarget as HTMLElement;
         e.preventDefault();
@@ -2369,6 +2473,7 @@
         menuVariables.export = () => exportData(choice.requireds, 'req');
         menuVariables.parent = choice;
         menuVariables.importType = 'req';
+        menuVariables.importNum = choice.requireds.length;
         tick().then(() => {
             menuVariables.isOpen = true;
         });
@@ -2389,6 +2494,7 @@
         menuVariables.export = () => exportData(choice.scores, 'score');
         menuVariables.parent = choice;
         menuVariables.importType = 'score';
+        menuVariables.importNum = choice.scores.length;
         tick().then(() => {
             menuVariables.isOpen = true;
         });
@@ -2409,6 +2515,7 @@
         menuVariables.export = () => exportData(choice.addons, 'addon');
         menuVariables.parent = choice;
         menuVariables.importType = 'addon';
+        menuVariables.importNum = choice.addons.length;
         tick().then(() => {
             menuVariables.isOpen = true;
         });
@@ -2431,8 +2538,25 @@
         });
     }
 
+    function dGroupContext(e: MouseEvent) {
+        const target = e.currentTarget as HTMLElement;
+        e.preventDefault();
+        target.blur();
+        if (menuVariables.isOpen) {
+            menuVariables.isOpen = false;
+            removeAnchor();
+        }
+        menuVariables.anchor = target.parentElement;
+        menuVariables.copy = () => copyDesignGroups();
+        menuVariables.paste = () => pasteDesignGroup();
+        menuVariables.clear = () => clearClipboard(6);
+        tick().then(() => {
+            menuVariables.isOpen = true;
+        });
+    }
+
     function cloneObject() {
-        const id = generateObjectId(0, app.objectIdLength);
+        const id = generateId(0, app.objectIdLength, 'choice');
         const clone: Choice = JSON.parse(JSON.stringify(choice));
 
         clone.id = id;
@@ -2444,7 +2568,7 @@
         for (let i = 0; i < clone.scores.length; i++) {
             const score = clone.scores[i];
 
-            score.idx = generateScoreId(0, 5);
+            score.idx = generateId(0, 5, 's');
             scoreSet.add(score.idx);
             if (clone.isSelectableMultiple) {
                 delete score.isActiveMul;
@@ -2454,35 +2578,6 @@
             }
             delete score.setValue;
             deleteDiscount(score);
-        }
-
-        for (let j = 0; j < clone.addons.length; j++) {
-            const addon = clone.addons[j];
-
-            addon.parentId = clone.id;
-            if (addon.isSelectable) {
-                addon.id = generateObjectId(0, 4, true);
-                addon.isActive = false;
-                delete addon.forcedActivated;
-                delete addon.appliedDisChoices;
-
-                if (addon.scores) {
-                    for (let j = 0; j < addon.scores.length; j++) {
-                        const score = addon.scores[j];
-
-                        score.idx = generateScoreId(0, 5);
-                        scoreSet.add(score.idx);
-                        if (addon.isSelectableMultiple) {
-                            delete score.isActiveMul;
-                            delete score.isActiveMulMinus;
-                        } else {
-                            delete score.isActive;
-                        }
-                        delete score.setValue;
-                        deleteDiscount(score);
-                    }
-                }
-            }
         }
 
         if (clone.backpackBtnRequirement) {
@@ -2499,7 +2594,29 @@
             for (let i = 0; i < clone.addons.length; i++) {
                 const addon = clone.addons[i];
 
+                addon.parentId = clone.id;
                 if (addon.isSelectable) {
+                    addon.id = generateId(0, app.objectIdLength, 'addon');
+                    addon.isActive = false;
+                    delete addon.forcedActivated;
+                    delete addon.appliedDisChoices;
+
+                    if (addon.scores) {
+                        for (let j = 0; j < addon.scores.length; j++) {
+                            const score = addon.scores[j];
+
+                            score.idx = generateId(0, 5, 's');
+                            scoreSet.add(score.idx);
+                            if (addon.isSelectableMultiple) {
+                                delete score.isActiveMul;
+                                delete score.isActiveMulMinus;
+                            } else {
+                                delete score.isActive;
+                            }
+                            delete score.setValue;
+                            deleteDiscount(score);
+                        }
+                    }
                     choiceMap.set(addon.id, {choice: row.objects[index + 1].addons[i] as SelectableAddon, row: row});
                 }
             }
@@ -2552,10 +2669,21 @@
         const group = groupMap.get(choice.groups[num]);
         choice.groups.splice(num, 1);
         if (typeof group !== 'undefined') {
-            let elementIndex = group.elements.indexOf(choice.id);
-            let rowElementIndex = group.rowElements.indexOf(row.id);
+            const elementIndex = group.elements.indexOf(choice.id);
+            const rowElementIndex = group.rowElements.indexOf(row.id);
             if (elementIndex !== -1) group.elements.splice(elementIndex, 1);
             if (rowElementIndex !== -1) group.rowElements.splice(rowElementIndex, 1);
+        }
+    }
+
+    function deleteDesignGroup(num: number) {
+        if (choice.objectDesignGroups) {
+            const group = objectDesignMap.get(choice.objectDesignGroups[num]);
+            choice.objectDesignGroups.splice(num, 1);
+            if (typeof group !== 'undefined') {
+                const elementIndex = group.elements.indexOf(choice.id);
+                if (elementIndex !== -1) group.elements.splice(elementIndex, 1);
+            }
         }
     }
 
@@ -2759,12 +2887,13 @@
 
     function objectWidthClass() {
         if (isSearch) return 'col-sm-6 col-12';
-        let objectWidth = (choice.objectWidth || row.objectWidth);
-        let objectWidthNum = objectWidthToNum(objectWidth);
-        let objectsPerRowNum = app.objectsPerRow === 'col-6' ? 2 : app.objectsPerRow === 'col-4' ? 3 : 4;
+        const objectWidth = row.overrideWidth ? row.objectWidth : (choice.objectWidth || row.objectWidth);
+        const objectWidthNum = objectWidthToNum(objectWidth);
+        const objectsPerRowNum = app.objectsPerRow === 'col-6' ? 2 : app.objectsPerRow === 'col-4' ? 3 : 4;
         if ($winWidth > 1280) {
             return objectWidth;
-        } else if ($winWidth > 720) {
+        } else if ($winWidth > app.smallerScreenPx) {
+            if (app.objectsPerRow === 'default') return fixedWidth(objectWidth);
             switch(objectWidthNum) {
                 case 1: return 'col-12';
                 case 2: return 'col-6';

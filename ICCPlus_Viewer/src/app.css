@@ -151,6 +151,9 @@ img {
 .mdc-text-field {
     width: 100%;
 }
+.mdc-text-field__input {
+    cursor: text;
+}
 .mdc-button {
     width: 100%;
 }
