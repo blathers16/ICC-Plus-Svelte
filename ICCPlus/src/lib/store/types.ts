@@ -245,6 +245,7 @@ export type rowStyling = {
     rowBodyMarginSides?: number,
     rowBodyMarginTop?: number,
     rowBodyMarginBottom?: number,
+    rowHeaderMarginBottom?: number,
     rowTextPaddingY?: number,
     rowTextPaddingX?: number,
     rowOverflowIsOn?: boolean,
@@ -607,7 +608,8 @@ export type ChoiceFunc = {
     useSfx?: boolean,
     sfxId?: string,
     sfxOnSelect?: boolean,
-    sfxOnDeselect?: boolean
+    sfxOnDeselect?: boolean,
+    isCountDisabled?: boolean
 };
 export type BaseAddon = {
     [key: string]: any;

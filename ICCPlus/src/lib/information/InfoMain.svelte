@@ -224,6 +224,19 @@
     }];
     const changelogList = [{
         open: true,
+        title: `v2.9.1 / ${getDate('2026-04-10T14:00:00Z')}`,
+        text: `<span style="color: green">Choice</span>
+        - Added option to not count choice as selected choice in the row.
+        - Fixed issue where the adjust allowed choices feature would sometimes not work properly.
+
+        <span style="color: green">Addon</span>
+        - Fixed issue where addon border radius was applied incorrectly when using selectable and non-selectable addons together.
+
+        <span style="color: green">Design</span>
+        - Added option to adjust spacing between row header and choices in Row Design.
+        `
+    }, {
+        open: false,
         title: `v2.9.0 / ${getDate('2026-04-04T14:00:00Z')}`,
         text: `<span style="color: green">Row</span>
         - Added option to hide unselected addons under hide the contents of choices.

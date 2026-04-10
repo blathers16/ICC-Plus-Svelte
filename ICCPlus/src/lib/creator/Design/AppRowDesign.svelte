@@ -61,46 +61,27 @@
                                 <Textfield class="mb-4" bind:value={() => styling.rowBodyMarginSides ?? 0, (e) => styling.rowBodyMarginSides = e} label="Row Left and Right Margin" type="number" suffix="%" variant="filled" />
                                 <Textfield class="mb-4" bind:value={() => styling.rowBodyMarginTop ?? 0, (e) => styling.rowBodyMarginTop = e} label="Row Top Margin" type="number" suffix="px" variant="filled" />
                                 <Textfield class="mb-4" bind:value={() => styling.rowBodyMarginBottom ?? 0, (e) => styling.rowBodyMarginBottom = e} label="Row Bottom Margin" type="number" suffix="px" variant="filled" />
+                                <Textfield class="mb-half" bind:value={() => styling.rowHeaderMarginBottom ?? 0, (e) => styling.rowHeaderMarginBottom = e} label="Row Header Bottom Margin" type="number" suffix="px" variant="filled" />
                                 <div class="col-12 px-3">Text Padding</div>
                                 <Textfield class="mb-4" bind:value={() => styling.rowTextPaddingY ?? 0, (e) => styling.rowTextPaddingY = e} label="Text Left and Right Padding" type="number" suffix="px" variant="filled" />
                                 <Textfield class="mb-4" bind:value={() => styling.rowTextPaddingX ?? 0, (e) => styling.rowTextPaddingX = e} label="Text Top and Bottom Padding" type="number" suffix="px" variant="filled" />
-                                <FormField class="w-100">
-                                    <Checkbox bind:checked={() => styling.rowBorderIsOn ?? false, (e) => styling.rowBorderIsOn = e} />
-                                    {#snippet label()}
-                                        Enable Border
-                                    {/snippet}
-                                </FormField>
                             </div>
                             <div class="col-lg-4 gy-2">
                                 <div class="col-12 px-3">Shadow that the row makes</div>
                                 <Textfield class="mb-4" bind:value={() => styling.rowDropShadowH ?? 0, (e) => styling.rowDropShadowH = e} label="Horizontal Shadow" type="number" suffix="px" variant="filled" />
                                 <Textfield class="mb-4" bind:value={() => styling.rowDropShadowV ?? 0, (e) => styling.rowDropShadowV = e} label="Vertical Shadow" type="number" suffix="px" variant="filled" />
                                 <Textfield class="mb-4" bind:value={() => styling.rowDropShadowBlur ?? 0, (e) => styling.rowDropShadowBlur = e} label="Shadow Blur" type="number" suffix="px" variant="filled" />
-                                <Textfield class="mb-4{styling.rowUseBoxShadowIsOn ? '' : ' disabled'}" bind:value={() => styling.rowDropShadowSpread ?? 0, (e) => styling.rowDropShadowSpread = e} label="Shadow Spread" type="number" suffix="px" variant="filled" />
+                                <Textfield class="mb-half{styling.rowUseBoxShadowIsOn ? '' : ' disabled'}" bind:value={() => styling.rowDropShadowSpread ?? 0, (e) => styling.rowDropShadowSpread = e} label="Shadow Spread" type="number" suffix="px" variant="filled" />
                                 <div class="col-12 px-3">The Width and Height of the buttons</div>
                                 <Textfield class="mb-4" bind:value={() => styling.rowButtonXPadding ?? 0, (e) => styling.rowButtonXPadding = e} label="Button Height" type="number" suffix="px" variant="filled" />
                                 <Textfield class="mb-4" bind:value={() => styling.rowButtonYPadding ?? 0, (e) => styling.rowButtonYPadding = e} label="Button Width" type="number" suffix="px" variant="filled" />
-                                <FormField class="w-100">
-                                    <Checkbox bind:checked={() => styling.rowDropShadowIsOn ?? false, (e) => styling.rowDropShadowIsOn = e} />
-                                    {#snippet label()}
-                                        Enable Shadow
-                                    {/snippet}
-                                </FormField>
-                                {#if styling.rowDropShadowIsOn}
-                                    <FormField class="w-100">
-                                        <Switch bind:checked={() => styling.rowUseBoxShadowIsOn ?? false, (e) => styling.rowUseBoxShadowIsOn = e} color="secondary" class="switch-scale" />
-                                        {#snippet label()}
-                                            Drop Shadow or Box Shadow?
-                                        {/snippet}
-                                    </FormField>
-                                {/if}
                             </div>
                             <div class="col-lg-4 gy-2">
                                 <div class="col-12 px-3">Rounded corners on the row</div>
                                 <Textfield class="mb-4" bind:value={() => styling.rowBorderRadiusTopLeft ?? 0, (e) => styling.rowBorderRadiusTopLeft = e} label="Border-radius Top Left" type="number" suffix={borderRadiusSuffix} variant="filled" />
                                 <Textfield class="mb-4" bind:value={() => styling.rowBorderRadiusTopRight ?? 0, (e) => styling.rowBorderRadiusTopRight = e} label="Border-radius Top Right" type="number" suffix={borderRadiusSuffix} variant="filled" />
                                 <Textfield class="mb-4" bind:value={() => styling.rowBorderRadiusBottomRight ?? 0, (e) => styling.rowBorderRadiusBottomRight = e} label="Border-radius Bottom Right" type="number" suffix={borderRadiusSuffix} variant="filled" />
-                                <Textfield class="mb-4" bind:value={() => styling.rowBorderRadiusBottomLeft ?? 0, (e) => styling.rowBorderRadiusBottomLeft = e} label="Border-radius Bottom Left" type="number" suffix={borderRadiusSuffix} variant="filled" />
+                                <Textfield class="mb-half" bind:value={() => styling.rowBorderRadiusBottomLeft ?? 0, (e) => styling.rowBorderRadiusBottomLeft = e} label="Border-radius Bottom Left" type="number" suffix={borderRadiusSuffix} variant="filled" />
                                 <div class="col-12 px-3">Border Style and Width</div>
                                 <Select class="mb-4" bind:value={() => styling.rowBorderStyle ?? '', (e) => styling.rowBorderStyle = e} label="Border Style" variant="filled">
                                     {#each borderStyles as borderStyle}
@@ -108,18 +89,6 @@
                                     {/each}
                                 </Select>
                                 <Textfield class="mb-4" bind:value={() => styling.rowBorderWidth ?? 0, (e) => styling.rowBorderWidth = e} label="Border Width" type="number" suffix="px" variant="filled" />
-                                <FormField class="w-100">
-                                    <Switch bind:checked={() => styling.rowBorderRadiusIsPixels ?? false, (e) => styling.rowBorderRadiusIsPixels = e} color="secondary" class="switch-scale" />
-                                    {#snippet label()}
-                                        Border-Radius Percent or Pixels?
-                                    {/snippet}
-                                </FormField>
-                                <FormField class="w-100">
-                                    <Checkbox bind:checked={() => styling.rowOverflowIsOn ?? false, (e) => styling.rowOverflowIsOn = e} />
-                                    {#snippet label()}
-                                        Border-Radius Cuts off overflow
-                                    {/snippet}
-                                </FormField>
                             </div>
                         </div>
                     {:else}
@@ -129,12 +98,7 @@
                                 <Textfield class="mb-4" bind:value={() => styling.rowMargin ?? 0, (e) => styling.rowMargin = e} label="Width of the row top" type="number" suffix="px" variant="filled" />
                                 <Textfield class="mb-4" bind:value={() => styling.rowBodyMarginSides ?? 0, (e) => styling.rowBodyMarginSides = e} label="Space at the right and left of the rows" type="number" suffix="%" variant="filled" />
                                 <Textfield class="mb-4" bind:value={() => styling.rowBodyMarginBottom ?? 0, (e) => styling.rowBodyMarginBottom = e} label="Space Between Rows" type="number" suffix="px" variant="filled" />
-                                <FormField class="w-100">
-                                    <Checkbox bind:checked={() => styling.rowBorderIsOn ?? false, (e) => styling.rowBorderIsOn = e} />
-                                    {#snippet label()}
-                                        Enable Border
-                                    {/snippet}
-                                </FormField>
+                                <Textfield class="mb-4" bind:value={() => styling.rowHeaderMarginBottom ?? 0, (e) => styling.rowHeaderMarginBottom = e} label="Space Between Header and Choices" type="number" suffix="px" variant="filled" />
                             </div>
                             <div class="col-lg-4 gy-2">
                                 <div class="col-12 px-3">Padding of the text inside of row</div>
@@ -146,20 +110,6 @@
                                     styling.rowDropShadowSpread = styling.rowDropShadowH; 
                                     styling.rowDropShadowBlur = styling.rowDropShadowH;
                                 }} label="The Higher the number the bigger the shadow will be" type="number" suffix="px" variant="filled" />
-                                <FormField class="w-100">
-                                    <Checkbox bind:checked={() => styling.rowDropShadowIsOn ?? false, (e) => styling.rowDropShadowIsOn = e} />
-                                    {#snippet label()}
-                                        Enable Shadow
-                                    {/snippet}
-                                </FormField>
-                                {#if styling.rowDropShadowIsOn}
-                                    <FormField class="w-100">
-                                        <Switch bind:checked={() => styling.rowUseBoxShadowIsOn ?? false, (e) => styling.rowUseBoxShadowIsOn = e} color="secondary" class="switch-scale" />
-                                        {#snippet label()}
-                                            Drop Shadow or Box Shadow?
-                                        {/snippet}
-                                    </FormField>
-                                {/if}
                             </div>
                             <div class="col-lg-4 gy-2">
                                 <div class="col-12 px-3">Border Style and Width</div>
@@ -177,18 +127,50 @@
                     {/if}
                     <div class="row">
                         <div class="col-lg-4 gy-2 text-center">
+                            <FormField class="w-100 text-left">
+                                <Checkbox bind:checked={() => styling.rowBorderIsOn ?? false, (e) => styling.rowBorderIsOn = e} />
+                                {#snippet label()}
+                                    Enable Border
+                                {/snippet}
+                            </FormField>
                             <div class="col-12 px-3">Border Color</div>
                             <div class:disabled={!styling.rowBorderIsOn}>
                                 <ColorPicker bind:hex={() => styling.rowBorderColor ?? '#000000', (e) => styling.rowBorderColor = e} components={ChromeVariant} sliderDirection="horizontal" isDialog={false} />
                             </div>
                         </div>
                         <div class="col-lg-4 gy-2 text-center">
+                            <FormField class="w-100 text-left">
+                                <Checkbox bind:checked={() => styling.rowDropShadowIsOn ?? false, (e) => styling.rowDropShadowIsOn = e} />
+                                {#snippet label()}
+                                    Enable Shadow
+                                {/snippet}
+                            </FormField>
+                            {#if styling.rowDropShadowIsOn}
+                                <FormField class="w-100 text-left">
+                                    <Switch bind:checked={() => styling.rowUseBoxShadowIsOn ?? false, (e) => styling.rowUseBoxShadowIsOn = e} color="secondary" class="switch-scale" />
+                                    {#snippet label()}
+                                        Drop Shadow or Box Shadow?
+                                    {/snippet}
+                                </FormField>
+                            {/if}
                             <div class="col-12 px-3">Color of the choice shadow</div>
                             <div class:disabled={!styling.rowDropShadowIsOn}>
                                 <ColorPicker bind:hex={() => styling.rowDropShadowColor ?? '#000000', (e) => styling.rowDropShadowColor = e} components={ChromeVariant} sliderDirection="horizontal" isDialog={false} />
                             </div>
                         </div>
                         <div class="col-lg-4 gy-2">
+                            <FormField class="w-100">
+                                <Switch bind:checked={() => styling.rowBorderRadiusIsPixels ?? false, (e) => styling.rowBorderRadiusIsPixels = e} color="secondary" class="switch-scale" />
+                                {#snippet label()}
+                                    Border-Radius Percent or Pixels?
+                                {/snippet}
+                            </FormField>
+                            <FormField class="w-100">
+                                <Checkbox bind:checked={() => styling.rowOverflowIsOn ?? false, (e) => styling.rowOverflowIsOn = e} />
+                                {#snippet label()}
+                                    Border-Radius Cuts off overflow
+                                {/snippet}
+                            </FormField>
                             <FormField class="w-100">
                                 <Checkbox bind:checked={() => styling.rowGradientIsOn ?? false, (e) => styling.rowGradientIsOn = e} />
                                 {#snippet label()}

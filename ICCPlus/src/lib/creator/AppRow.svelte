@@ -712,6 +712,7 @@
                 styles.push(`filter: drop-shadow(${rowStyle.rowDropShadowH}px ${rowStyle.rowDropShadowV}px ${rowStyle.rowDropShadowBlur}px ${hexToRgba(rowStyle.rowDropShadowColor)});`);
             }
         }
+        styles.push(`margin-bottom: ${rowStyle.rowHeaderMarginBottom}px;`);
 
         return styles.join(' ');
     });

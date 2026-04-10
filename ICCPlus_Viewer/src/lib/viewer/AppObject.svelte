@@ -75,7 +75,7 @@
                         {#if nAddons}
                             <div class="row g-0 p-0 w-100{addonJustify}">
                                 {#each nAddons as addon, i}
-                                    <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} mainDiv={mainDiv} />
+                                    <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex.source === 'n' && firstAddonIndex.index === i} isBackpack={isBackpack} mainDiv={mainDiv} />
                                 {/each}
                             </div>
                         {/if}
@@ -86,7 +86,7 @@
                     {#if sAddons}
                         <div class="row g-0 p-0 w-100{addonJustify}">
                             {#each sAddons as addon, i}
-                                <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} mainDiv={mainDiv} index={i} list={sAddons as SelectableAddon[]} />
+                                <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex.source === 's' && firstAddonIndex.index === i} isBackpack={isBackpack} mainDiv={mainDiv} index={i} list={sAddons as SelectableAddon[]} />
                             {/each}
                         </div>
                     {/if}
@@ -139,7 +139,7 @@
                                     {#if nAddons}
                                         <div class="row g-0 p-0 col w-100{addonJustify}">
                                             {#each nAddons as addon, i}
-                                                <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} mainDiv={mainDiv} />
+                                                <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex.source === 'n' && firstAddonIndex.index === i} isBackpack={isBackpack} mainDiv={mainDiv} />
                                             {/each}
                                         </div>
                                     {/if}
@@ -153,7 +153,7 @@
                                     {#if nAddons}
                                         <div class="row g-0 p-0 col w-100{addonJustify}">
                                             {#each nAddons as addon, i}
-                                                <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} mainDiv={mainDiv} />
+                                                <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex.source === 'n' && firstAddonIndex.index === i} isBackpack={isBackpack} mainDiv={mainDiv} />
                                             {/each}
                                         </div>
                                     {/if}
@@ -166,7 +166,7 @@
                         {#if sAddons}
                             <div class="row g-0 p-0 col w-100{addonJustify}">
                                 {#each sAddons as addon, i}
-                                    <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} mainDiv={mainDiv} index={i} list={sAddons as SelectableAddon[]} />
+                                    <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex.source === 's' && firstAddonIndex.index === i} isBackpack={isBackpack} mainDiv={mainDiv} index={i} list={sAddons as SelectableAddon[]} />
                                 {/each}
                             </div>
                         {/if}
@@ -209,7 +209,7 @@
                                     {#if nAddons}
                                         <div class="row g-0 p-0 col w-100{addonJustify}">
                                             {#each nAddons as addon, i}
-                                                <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} mainDiv={mainDiv} />
+                                                <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex.source === 'n' && firstAddonIndex.index === i} isBackpack={isBackpack} mainDiv={mainDiv} />
                                             {/each}
                                         </div>
                                     {/if}
@@ -232,7 +232,7 @@
                                     {#if nAddons}
                                         <div class="row g-0 p-0 col w-100{addonJustify}">
                                             {#each nAddons as addon, i}
-                                                <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} mainDiv={mainDiv} />
+                                                <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex.source === 'n' && firstAddonIndex.index === i} isBackpack={isBackpack} mainDiv={mainDiv} />
                                             {/each}
                                         </div>
                                     {/if}
@@ -245,7 +245,7 @@
                         {#if sAddons}
                             <div class="row g-0 p-0 col w-100{addonJustify}">
                                 {#each sAddons as addon, i}
-                                    <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex === i} isBackpack={isBackpack} mainDiv={mainDiv} index={i} list={sAddons as SelectableAddon[]} />
+                                    <ObjectAddon row={row} choice={choice} addon={addon} isEnabled={isEnabled} windowWidth={windowWidth} preloadImages={preloadImages} isFirst={firstAddonIndex.source === 's' && firstAddonIndex.index === i} isBackpack={isBackpack} mainDiv={mainDiv} index={i} list={sAddons as SelectableAddon[]} />
                                 {/each}
                             </div>
                         {/if}
@@ -263,7 +263,7 @@
     import ObjectRequired from './Object/ObjectRequired.svelte';
     import ObjectScore from './Object/ObjectScore.svelte';
 	import type { BgStyles, Choice, ChoiceOptions, Filters, Row, SelectableAddon } from '$lib/store/types';
-	import { app, choiceMap, getStyling, checkRequirements, sanitizeArg, replaceText, objectWidthToNum, snackbarVariables, winWidth, hexToRgba, selectObject, deselectObject, selectedOneMore, selectedOneLess, closestByClassPrefix, fixedWidth } from '$lib/store/store.svelte';
+	import { app, choiceMap, getStyling, checkRequirements, sanitizeArg, replaceText, objectWidthToNum, snackbarVariables, winWidth, hexToRgba, selectObject, deselectObject, selectedOneMore, selectedOneLess, wordDialog, closestByClassPrefix, fixedWidth } from '$lib/store/store.svelte';
     import { tooltip } from '$lib/custom/tooltip/store.svelte';
 
     export { activateObject, options };
@@ -300,7 +300,7 @@
             for (let i = 0; i < nAddons.length; i++) {
                 const addon = nAddons[i];
                 if (!addon.skipIndex) {
-                    return i;
+                    return {source: 'n', index: i};
                 }
             }
         }
@@ -308,11 +308,11 @@
             for (let i = 0; i < sAddons.length; i++) {
                 const addon = sAddons[i];
                 if (!addon.skipIndex) {
-                    return i;
+                    return {source: 's', index: i};
                 }
             }
         }
-        return -1;
+        return {source: 'none', index: -1};
     });
     let backgroundStyle = $derived(getStyling('privateBackgroundIsOn', row, choice));
     let filterStyle = $derived(getStyling('privateFilterIsOn', row, choice));
